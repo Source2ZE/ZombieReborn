@@ -5,7 +5,7 @@ An experimental implementation of Zombie Escape in Counter-Strike 2 using the Lu
 [Join our Discord](https://discord.gg/QsSGf9ZEVs) for development discussion and to keep up to date!
 
 ## Current issues
-[Here](issues.md)
+You can find the current issues with CS2 we'd like to report to Valve [here](issues.md)
 
 ## The Future?
 
