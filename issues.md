@@ -1,0 +1,1 @@
+This is a list of current CS2 issues that we'd like Valve to fix
