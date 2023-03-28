@@ -1,0 +1,11 @@
+This is a list of current CS2 issues that we'd like Valve to fix:
+- The ability to edit entity keyvalues, both through a hammer output akin to AddOutput in source 1 and vscript API
+- Players get stuck on moving objects if they touch them from the sides (i.e. standing on top of them is fine)
+- The game_ui, player_speedmod, and game_money entities are missing with seemingly no equivalent available
+- Hud health doesn't support more than 3 digits
+- game_text/UTIL_MessageText does not work, possibly due to the removal of vgui elements
+- HTML formatting is broken in ScriptPrintMessageCenter
+- Surf ramps clip the player at the top and bottom, as if there's a protruding edge somehow, this was not an issue in HL:A
+- The player_chat game event does not fire
+- UserIDToControllerHScript has an off-by-one error and occasionally does not work at all
+- Missing monitor shader for info_offscreen_panorama_texture, and missing info_offscreen_movie_texture entity

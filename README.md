@@ -4,6 +4,9 @@ An experimental implementation of Zombie Escape in Counter-Strike 2 using the Lu
 
 [Join our Discord](https://discord.gg/QsSGf9ZEVs) for development discussion and to keep up to date!
 
+## Current issues
+You can find the current issues with CS2 we'd like to report to Valve [here](issues.md)
+
 ## The Future?
 
 It is currently unknown how the plugin ecosystem is going to work on CS2, see the [AlliedModders wiki entry](https://wiki.alliedmods.net/Introduction_to_SourceMod_Plugins#Will_SourceMod_support_Source_2.3F_Will_plugins_for_existing_games_continue_to_work_if_they_are_ported.3F) on this for more information. We currently foresee a few possible outcomes of how this repository may be useful:
