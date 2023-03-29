@@ -8,13 +8,13 @@ Convars:RegisterConvar("zr_knockback_scale", "5", "Knockback damage multiplier",
 function ZE_ONROUNDSTART(event)
     local countdown = ZE_ZOMBIE_INFECT_TIME
     print("STARTING A NEW ROUND")
-    SetAllHuman()
+   -- SetAllHuman()
     ZE_ROUND_STARTED = false
 
     Timers:CreateTimer("ZEINFECTTIMER", {
         callback = function()
             countdown = countdown - 1
-            ScriptPrintMessageCenterAll("ZOMBIE INFECT IN " .. countdown .. " SECONDS.")
+            ScriptPrintMessageCenterAll("First infection in " .. countdown .. " seconds")
 
             if countdown <= 0 then
                 Timers:RemoveTimer("ZEINFECTTIMER")
