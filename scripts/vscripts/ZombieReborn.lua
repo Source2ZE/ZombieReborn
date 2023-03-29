@@ -11,8 +11,8 @@ ZR_ROUND_STARTED = false
 -- round start logic
 function OnRoundStart(event)
     ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
-	SetAllHuman()
-	MZSelection_OnRoundStart()
+    SetAllHuman()
+    MZSelection_OnRoundStart()
     ZR_ROUND_STARTED = true
 end
 
