@@ -9,3 +9,4 @@ This is a list of current CS2 issues that we'd like Valve to fix:
 - The player_chat game event does not fire
 - UserIDToControllerHScript has an off-by-one error and occasionally does not work at all
 - Missing monitor shader for info_offscreen_panorama_texture, and missing info_offscreen_movie_texture entity
+- IgniteLifetime crashes the game
