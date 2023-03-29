@@ -1,9 +1,18 @@
 print("Starting ZombieReborn!")
-require("util.timers")
-ZR_ZOMBIE_INFECT_TIME = 20
-ZR_ROUND_STARTED = false
+
+require "util.functions"
+require "util.timers"
+require "ZombieReborn.PickMotherZombies"
+
 Convars:RegisterConvar("zr_knockback_scale", "5", "Knockback damage multiplier", 0)
 tWeaponConfigs = LoadKeyValues("cfg\\zr\\weapons.cfg")
+ZR_ROUND_STARTED = false
+
+Convars:SetInt("mp_autoteambalance",0)
+Convars:SetInt("mp_limitteams",0)
+
+-- time after round start when tts should stop respawning
+test_repeatkiller_time = 40
 
 --remove duplicated listeners upon manual reload
 if tListenerIds then
@@ -12,25 +21,17 @@ if tListenerIds then
 	end
 end
 
----countdown timer
-function ZR_ONROUNDSTART(event)
-    local countdown = ZE_ZOMBIE_INFECT_TIME
-    print("STARTING A NEW ROUND")
-   -- SetAllHuman()
-    ZE_ROUND_STARTED = false
-
-    Timers:CreateTimer("ZEINFECTTIMER", {
-        callback = function()
-            countdown = countdown - 1
-            ScriptPrintMessageCenterAll("First infection in " .. countdown .. " seconds")
-
-            if countdown <= 0 then
-                Timers:RemoveTimer("ZEINFECTTIMER")
-            end
-
-            return 1
-        end
-    })
+-- round start logic
+function OnRoundStart(event)
+    Convars:SetInt("mp_respawn_on_death_t",1)
+    Convars:SetInt('mp_ignore_round_win_conditions',1)
+    ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
+    SetAllHuman()
+    MZSelection_OnRoundStart()
+    DoEntFireByInstanceHandle(world,"RunScriptCode","Convars:SetInt('mp_respawn_on_death_t',0)",test_repeatkiller_time,nil,nil)
+    DoEntFireByInstanceHandle(world,"RunScriptCode","Convars:SetInt('mp_ignore_round_win_conditions',0)",test_repeatkiller_time,nil,nil)
+    DoEntFireByInstanceHandle(world,"RunScriptCode","Say(nil,'RepeatKiller activated',false)",test_repeatkiller_time,nil,nil)
+    ZR_ROUND_STARTED = true
 end
 
 -- Apparently entity indices take up the first 14 bits of an EHandle, need more testing to really verify this
@@ -123,5 +124,5 @@ tListenerIds = {
     ListenToGameEvent("player_hurt", OnPlayerHurt, nil),
     ListenToGameEvent("player_death", OnPlayerDeath, nil),
     ListenToGameEvent("hegrenade_detonate", OnGrenadeDetonate, nil),
-    ListenToGameEvent("round_start", ZR_ONROUNDSTART, nil)
+    ListenToGameEvent("round_start", OnRoundStart, nil)
 }
