@@ -78,15 +78,15 @@ function MZSelection_OnRoundStart ()
     Timers:CreateTimer("MZSelection_Timer",{
         callback = function()
             if MZSelection_Countdown <= 0 then
-                ScriptPrintMessageCenterAll("Mother Zombies have spawned!")
-                ScriptPrintMessageChatAll(" \x04[Zombie:Reborn]\x01 Mother Zombies have spawned! Good luck, survivors!")
+                ScriptPrintMessageCenterAll("First infection has started!")
+                ScriptPrintMessageChatAll(" \x04[Zombie:Reborn]\x01 First infection has started! Good luck, survivors!")
                 PickAndInfectMotherZombies()
                 Timers:RemoveTimer("MZSelection_Timer")
             elseif MZSelection_Countdown <= 15 then
-                if MZSelection_Countdown == 1 then ScriptPrintMessageCenterAll("Mother Zombies will spawn in \x071 second\x01!")
-                else ScriptPrintMessageCenterAll("Mother Zombies will spawn in \x07"..MZSelection_Countdown.." seconds\x01!") end
+                if MZSelection_Countdown == 1 then ScriptPrintMessageCenterAll("First infection in \x071 second\x01!")
+                else ScriptPrintMessageCenterAll("First infection in \x07"..MZSelection_Countdown.." seconds\x01!") end
                 if MZSelection_Countdown % 5 == 0 then
-                    ScriptPrintMessageChatAll(" \x04[Zombie:Reborn]\x01 Mother Zombies will spawn in \x07"..MZSelection_Countdown.." seconds\x01!")
+                    ScriptPrintMessageChatAll(" \x04[Zombie:Reborn]\x01 First infection in \x07"..MZSelection_Countdown.." seconds\x01!")
                 end
             end
             MZSelection_Countdown = MZSelection_Countdown - 1
