@@ -1,5 +1,6 @@
 print("Starting ZombieReborn!")
 
+require "util.functions"
 require "util.timers"
 require "ZombieReborn.PickMotherZombies"
 
