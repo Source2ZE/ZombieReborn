@@ -9,7 +9,7 @@ An experimental implementation of Zombie Escape in Counter-Strike 2 using the Lu
 Copy both the `scripts` and `cfg` directories to your `game/csgo` folder. If you've already made changes to your server cfg's, you may want to just copy the contents of ours in instead.
 
 ## Current issues
-You can find the current issues with CS2 we'd like to report to Valve [here](issues.md)
+You can find the current issues with CS2 we'd like to report to Valve [here](../../wiki/CS2-Issues)
 
 ## The Future?
 
