@@ -1,4 +1,4 @@
-print("Starting ZombieReborn !")
+print("Starting ZombieReborn!")
 
 Convars:RegisterConvar("zr_knockback_scale", "5", "Knockback damage multiplier", 0)
 
