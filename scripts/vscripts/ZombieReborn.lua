@@ -1,5 +1,5 @@
 print("Starting ZombieReborn!")
-require("timers")
+require("util.timers")
 ZE_ZOMBIE_INFECT_TIME = 20
 ZE_ROUND_STARTED = false
 Convars:RegisterConvar("zr_knockback_scale", "5", "Knockback damage multiplier", 0)
