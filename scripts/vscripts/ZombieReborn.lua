@@ -1,31 +1,19 @@
 print("Starting ZombieReborn!")
-require("util.timers")
-ZR_ZOMBIE_INFECT_TIME = 20
-ZR_ROUND_STARTED = false
+
+require "util.timers"
+require "ZombieReborn.PickMotherZombies"
+
 Convars:RegisterConvar("zr_knockback_scale", "5", "Knockback damage multiplier", 0)
 
----countdown timer
-function ZR_ONROUNDSTART(event)
-    local countdown = ZE_ZOMBIE_INFECT_TIME
-    print("STARTING A NEW ROUND")
-   -- SetAllHuman()
-    ZE_ROUND_STARTED = false
+ZR_ROUND_STARTED = false
 
-    Timers:CreateTimer("ZEINFECTTIMER", {
-        callback = function()
-            countdown = countdown - 1
-            ScriptPrintMessageCenterAll("First infection in " .. countdown .. " seconds")
-
-            if countdown <= 0 then
-                Timers:RemoveTimer("ZEINFECTTIMER")
-            end
-
-            return 1
-        end
-    })
+-- round start logic
+function OnRoundStart(event)
+    ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
+	SetAllHuman()
+	MZSelection_OnRoundStart()
+    ZR_ROUND_STARTED = true
 end
-
-ListenToGameEvent("round_start", ZR_ONROUNDSTART, nil)
 
 -- Apparently entity indices take up the first 14 bits of an EHandle, need more testing to really verify this
 function EHandleToHScript(iPawnId)
@@ -91,5 +79,6 @@ function OnPlayerDeath(event)
     end
 end
 
+ListenToGameEvent("round_start", OnRoundStart, nil)
 ListenToGameEvent("player_hurt", OnPlayerHurt, nil)
 ListenToGameEvent("player_death", OnPlayerDeath, nil)
