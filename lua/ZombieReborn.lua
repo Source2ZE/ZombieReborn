@@ -287,7 +287,7 @@ Convars:RegisterConvar("zr_knockback_scale", "5", "Knockback damage multiplier",
 function ZE_ONROUNDSTART(event)
     local countdown = ZE_ZOMBIE_INFECT_TIME
     print("STARTING A NEW ROUND")
-    SetAllHuman()
+   -- SetAllHuman() 
     ZE_ROUND_STARTED = false
 
     Timers:CreateTimer("ZEINFECTTIMER", {
