@@ -1,4 +1,4 @@
--- put your fancy global functions here for you (and other's) to use, i guess
+-- put your fancy global functions here for you (and others) to use, i guess
 
 -- shuffles positions of elements in an array
 -- usable only for array type of tables (when keys are not strings)
