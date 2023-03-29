@@ -1,4 +1,4 @@
-print("Starting ZombieReborn !")
+print("Starting ZombieReborn!")
 
 TIMERS_VERSION = "1.05.1"
 --[[
