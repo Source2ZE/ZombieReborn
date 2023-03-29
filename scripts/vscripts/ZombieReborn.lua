@@ -113,5 +113,5 @@ tListenerIds = {
     ListenToGameEvent("player_hurt", OnPlayerHurt, nil),
     ListenToGameEvent("player_death", OnPlayerDeath, nil),
     ListenToGameEvent("hegrenade_detonate", OnGrenadeDetonate, nil),
-    ListenToGameEvent("round_start", ZR_ONROUNDSTART, nil)
+    ListenToGameEvent("round_start", OnRoundStart, nil)
 }
