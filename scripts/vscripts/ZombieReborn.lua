@@ -3,7 +3,7 @@ require("util.timers")
 ZR_ZOMBIE_INFECT_TIME = 20
 ZR_ROUND_STARTED = false
 Convars:RegisterConvar("zr_knockback_scale", "5", "Knockback damage multiplier", 0)
-tWeaponConfigs = LoadKeyValues("scripts\\vscripts\\cfg\\weapons.cfg")
+tWeaponConfigs = LoadKeyValues("cfg\\zr\\weapons.cfg")
 
 --remove duplicated listeners upon manual reload
 if tListenerIds then
@@ -87,7 +87,7 @@ function ApplyKnockback(hHuman, hZombie, iDamage, sWeapon)
 end
 
 function OnPlayerHurt(event)
-    __DumpScope(0, event)
+    --__DumpScope(0, event)
     if event.weapon == "" or event.attacker_pawn == nil then return end
     local hAttacker = EHandleToHScript(event.attacker_pawn)
     local hVictim = EHandleToHScript(event.userid_pawn)
@@ -101,7 +101,7 @@ end
 
 -- player_death doesn't have dmg_health, so it has a separate callback
 function OnPlayerDeath(event)
-    __DumpScope(0, event)
+    --__DumpScope(0, event)
     if event.weapon == "" or event.attacker_pawn == -1 then return end
     local hAttacker = EHandleToHScript(event.attacker_pawn)
     local hVictim = EHandleToHScript(event.userid_pawn)
