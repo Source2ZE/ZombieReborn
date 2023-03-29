@@ -2,10 +2,10 @@ print("Starting ZombieReborn!")
 
 require "util.functions"
 require "util.timers"
-require "ZombieReborn.PickMotherZombies"
+require "ZombieReborn.Convars"
+require "ZombieReborn.Infect"
+require "ZombieReborn.Knockback"
 
-Convars:RegisterConvar("zr_knockback_scale", "5", "Knockback damage multiplier", 0)
-tWeaponConfigs = LoadKeyValues("cfg\\zr\\weapons.cfg")
 ZR_ROUND_STARTED = false
 
 Convars:SetInt("mp_autoteambalance",0)
@@ -16,9 +16,9 @@ test_repeatkiller_time = 40
 
 --remove duplicated listeners upon manual reload
 if tListenerIds then
-	for k, v in ipairs(tListenerIds) do
-		StopListeningToGameEvent(v)
-	end
+    for k, v in ipairs(tListenerIds) do
+        StopListeningToGameEvent(v)
+    end
 end
 
 -- round start logic
@@ -27,16 +27,11 @@ function OnRoundStart(event)
     Convars:SetInt('mp_ignore_round_win_conditions',1)
     ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
     SetAllHuman()
-    MZSelection_OnRoundStart()
+    Infect_OnRoundStart()
     DoEntFireByInstanceHandle(world,"RunScriptCode","Convars:SetInt('mp_respawn_on_death_t',0)",test_repeatkiller_time,nil,nil)
     DoEntFireByInstanceHandle(world,"RunScriptCode","Convars:SetInt('mp_ignore_round_win_conditions',0)",test_repeatkiller_time,nil,nil)
     DoEntFireByInstanceHandle(world,"RunScriptCode","Say(nil,'RepeatKiller activated',false)",test_repeatkiller_time,nil,nil)
     ZR_ROUND_STARTED = true
-end
-
--- Apparently entity indices take up the first 14 bits of an EHandle, need more testing to really verify this
-function EHandleToHScript(iPawnId)
-    return EntIndexToHScript(bit.band(iPawnId, 0x3FFF))
 end
 
 function SetAllHuman()
@@ -53,40 +48,6 @@ function SetAllHuman()
     Convars:SetBool("mp_respawn_on_death_ct", false)
 end
 
-function Infect(hInfected, bKeepPosition)
-    local vecOrigin = hInfected:GetOrigin()
-    local vecAngles = hInfected:EyeAngles()
-    hInfected:SetTeam(2)
-    if bKeepPosition == false then return end
-    hInfected:SetOrigin(vecOrigin)
-    hInfected:SetAngles(vecAngles.x, vecAngles.y, vecAngles.z)
-end
-
-function ApplyKnockback(hHuman, hZombie, iDamage, sWeapon)
-    local iScale = Convars:GetInt("zr_knockback_scale")
-
-    -- Registering convars seems to be broken at the moment so just force the default for now
-    if iScale == nil then
-        iScale = 5
-    end
-
-	if tWeaponConfigs and tWeaponConfigs[sWeapon] and tWeaponConfigs[sWeapon].knockback then
-		iScale = iScale * tWeaponConfigs[sWeapon].knockback
-	end
-
-    -- For Hegrenade
-	if sWeapon == "hegrenade" and tRecordedGrenadePosition[hHuman] then
-		local vecDisplacementNorm = (hZombie:GetCenter() - tRecordedGrenadePosition[hHuman]):Normalized()
-		local vecKnockback = vecDisplacementNorm * iDamage * iScale
-		hZombie:ApplyAbsVelocityImpulse(vecKnockback)
-		return
-	end
-
-    local vecAttackerAngle = AnglesToVector(hHuman:EyeAngles())
-    local vecKnockback = vecAttackerAngle * iDamage * iScale
-    hZombie:ApplyAbsVelocityImpulse(vecKnockback)
-end
-
 function OnPlayerHurt(event)
     --__DumpScope(0, event)
     if event.weapon == "" or event.attacker_pawn == nil then return end
@@ -94,7 +55,7 @@ function OnPlayerHurt(event)
     local hVictim = EHandleToHScript(event.userid_pawn)
 
     if hAttacker:GetTeam() == 3 and hVictim:GetTeam() == 2 then
-        ApplyKnockback(hAttacker, hVictim, event.dmg_health, event.weapon)
+        Knockback_Apply(hAttacker, hVictim, event.dmg_health, event.weapon)
     elseif hAttacker:GetTeam() == 2 and hVictim:GetTeam() == 3 then
         Infect(hVictim, true)
     end
@@ -112,17 +73,9 @@ function OnPlayerDeath(event)
     end
 end
 
-tRecordedGrenadePosition = {}
-function OnGrenadeDetonate(event)
-	--__DumpScope(0, event)
-	local hThrower = EHandleToHScript(event.userid_pawn)
-	local vecDetonatePosition = Vector(event.x, event.y, event.z)
-	tRecordedGrenadePosition[hThrower] = vecDetonatePosition
-end
-
 tListenerIds = {
     ListenToGameEvent("player_hurt", OnPlayerHurt, nil),
     ListenToGameEvent("player_death", OnPlayerDeath, nil),
-    ListenToGameEvent("hegrenade_detonate", OnGrenadeDetonate, nil),
+    ListenToGameEvent("hegrenade_detonate", Knockback_OnGrenadeDetonate, nil),
     ListenToGameEvent("round_start", OnRoundStart, nil)
 }
