@@ -48,12 +48,12 @@ function ApplyKnockback(hHuman, hZombie, iDamage, sWeapon)
 	if iScale == nil then iScale = 5 end
 	
 	if tWeaponConfigs and tWeaponConfigs[sWeapon] and tWeaponConfigs[sWeapon].knockback then
-		iScale = iScale * tWeaponConfigs[sWeapon].knockback;
+		iScale = iScale * tWeaponConfigs[sWeapon].knockback
 	end
 	-- For Hegrenade
 	if sWeapon == "hegrenade" and tRecordedGrenadePosition[hHuman] then
-		local vecDisplacementNorm = (hZombie:GetCenter() - tRecordedGrenadePosition[hHuman]):Normalized();
-		local vecKnockback = vecDisplacementNorm * iDamage * iScale;
+		local vecDisplacementNorm = (hZombie:GetCenter() - tRecordedGrenadePosition[hHuman]):Normalized()
+		local vecKnockback = vecDisplacementNorm * iDamage * iScale
 		hZombie:ApplyAbsVelocityImpulse(vecKnockback)
 		return
 	end
@@ -106,10 +106,10 @@ end
 
 tRecordedGrenadePosition = {}
 function OnGrenadeDetonate(event)
-	--__DumpScope(0, event);
+	--__DumpScope(0, event)
 	local hThrower = EHandleToHScript(event.userid_pawn)
 	local vecDetonatePosition = Vector(event.x, event.y, event.z)
-	tRecordedGrenadePosition[hThrower] = vecDetonatePosition;
+	tRecordedGrenadePosition[hThrower] = vecDetonatePosition
 end
 
 tListenerIds = {
