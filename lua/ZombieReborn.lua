@@ -3,7 +3,7 @@ print("Starting ZombieReborn !")
 Convars:RegisterConvar("zr_knockback_scale", "5", "Knockback damage multiplier", 0)
 
 --remove duplicated listeners upon reload
-if(tListenerIds) then
+if tListenerIds then
 	for k, v in ipairs(tListenerIds) do
 		StopListeningToGameEvent(v)
 	end
@@ -47,11 +47,11 @@ function ApplyKnockback(hHuman, hZombie, iDamage, sWeapon)
 	-- Registering convars seems to be broken at the moment so just force the default for now
 	if iScale == nil then iScale = 5 end
 	
-	if(tWeaponConfigs and tWeaponConfigs[sWeapon] and tWeaponConfigs[sWeapon].knockback) then
+	if tWeaponConfigs and tWeaponConfigs[sWeapon] and tWeaponConfigs[sWeapon].knockback then
 		iScale = iScale * tWeaponConfigs[sWeapon].knockback;
 	end
 	-- For Hegrenade
-	if (sWeapon == "hegrenade" and tRecordedGrenadePosition[hHuman]) then
+	if sWeapon == "hegrenade" and tRecordedGrenadePosition[hHuman] then
 		local vecDisplacementNorm = (hZombie:GetCenter() - tRecordedGrenadePosition[hHuman]):Normalized();
 		local vecKnockback = vecDisplacementNorm * iDamage * iScale;
 		hZombie:ApplyAbsVelocityImpulse(vecKnockback)
