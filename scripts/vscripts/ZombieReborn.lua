@@ -1,11 +1,11 @@
 print("Starting ZombieReborn!")
 require("util.timers")
-ZE_ZOMBIE_INFECT_TIME = 20
-ZE_ROUND_STARTED = false
+ZR_ZOMBIE_INFECT_TIME = 20
+ZR_ROUND_STARTED = false
 Convars:RegisterConvar("zr_knockback_scale", "5", "Knockback damage multiplier", 0)
 
 ---countdown timer
-function ZE_ONROUNDSTART(event)
+function ZR_ONROUNDSTART(event)
     local countdown = ZE_ZOMBIE_INFECT_TIME
     print("STARTING A NEW ROUND")
    -- SetAllHuman()
@@ -25,7 +25,7 @@ function ZE_ONROUNDSTART(event)
     })
 end
 
-ListenToGameEvent("round_start", ZE_ONROUNDSTART, nil)
+ListenToGameEvent("round_start", ZR_ONROUNDSTART, nil)
 
 -- Apparently entity indices take up the first 14 bits of an EHandle, need more testing to really verify this
 function EHandleToHScript(iPawnId)
