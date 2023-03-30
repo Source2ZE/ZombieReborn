@@ -1,7 +1,7 @@
 function Infect(hInfected, bKeepPosition)
     local vecOrigin = hInfected:GetOrigin()
     local vecAngles = hInfected:EyeAngles()
-    hInfected:SetTeam(2)
+    hInfected:SetTeam(CS_TEAM_T)
     if bKeepPosition == false then return end
     hInfected:SetOrigin(vecOrigin)
     hInfected:SetAngles(vecAngles.x, vecAngles.y, vecAngles.z)
