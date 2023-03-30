@@ -22,6 +22,8 @@ Convars:RegisterConvar("zr_infect_spawn_mz_min_count", tostring(Config.Infect.Sp
 Convars:RegisterConvar("zr_knockback_scale", tostring(Config.Knockback.Scale), "Knockback damage multiplier", 0)
 
 -- Create a table to store cvars
+CVARS = {}
+
 CVARS.Infect = {
     SpawnType = Convars:GetInt("zr_infect_spawn_type") or Config.Infect.SpawnType,
     SpawnTimeMin = Convars:GetInt("zr_infect_spawn_time_min") or Config.Infect.SpawnTimeMin,
