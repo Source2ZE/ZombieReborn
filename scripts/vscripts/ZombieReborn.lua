@@ -34,6 +34,7 @@ function OnRoundStart(event)
     DoEntFireByInstanceHandle(world,"RunScriptCode","Convars:SetInt('mp_ignore_round_win_conditions',0)",test_repeatkiller_time,nil,nil)
     DoEntFireByInstanceHandle(world,"RunScriptCode","Say(nil,'RepeatKiller activated',false)",test_repeatkiller_time,nil,nil)
     ZR_ROUND_STARTED = true
+    ZR_ZOMBIE_SPAWNED = false
 end
 
 function SetAllHuman()
