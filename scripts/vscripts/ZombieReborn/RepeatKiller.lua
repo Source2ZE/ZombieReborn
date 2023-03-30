@@ -15,12 +15,12 @@ function ToggleRepeatKiller()
     if bRepeatKillerToggle == false then
         DoEntFireByInstanceHandle(hRelay,"RunScriptCode","Convars:SetInt('mp_respawn_on_death_t',0)",0,nil,nil)
         DoEntFireByInstanceHandle(hRelay,"RunScriptCode","Convars:SetInt('mp_ignore_round_win_conditions',0)",0,nil,nil)
-        ScriptPrintMessageChatAll(" \x04[Zombie:Reborn]\x01 Respawning enabled!")
+        ScriptPrintMessageChatAll(" \x04[Zombie:Reborn]\x01 Respawning disabled!")
     end
     if bRepeatKillerToggle == true then
         DoEntFireByInstanceHandle(hRelay,"RunScriptCode","Convars:SetInt('mp_respawn_on_death_t',1)",0,nil,nil)
         DoEntFireByInstanceHandle(hRelay,"RunScriptCode","Convars:SetInt('mp_ignore_round_win_conditions',1)",0,nil,nil)
-        ScriptPrintMessageChatAll(" \x04[Zombie:Reborn]\x01 Respawning disabled!")
+        ScriptPrintMessageChatAll(" \x04[Zombie:Reborn]\x01 Respawning enabled!")
     end
 
     bRepeatKillerToggle =  not bRepeatKillerToggle
