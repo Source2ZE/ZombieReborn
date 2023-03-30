@@ -7,13 +7,12 @@ require "ZombieReborn.Convars"
 require "ZombieReborn.Infect"
 require "ZombieReborn.Knockback"
 
+-- time after round start when tts should stop respawning
+test_repeatkiller_time = 40
 ZR_ROUND_STARTED = false
 
 Convars:SetInt("mp_autoteambalance",0)
 Convars:SetInt("mp_limitteams",0)
-
--- time after round start when tts should stop respawning
-test_repeatkiller_time = 40
 
 --remove duplicated listeners upon manual reload
 if tListenerIds then
@@ -24,6 +23,8 @@ end
 
 -- round start logic
 function OnRoundStart(event)
+    world = Entities:FindByClassname(nil,"worldent")
+
     Convars:SetInt("mp_respawn_on_death_t",1)
     Convars:SetInt('mp_ignore_round_win_conditions',1)
     ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
