@@ -3,6 +3,17 @@ require "ZombieReborn.Convars"
 function Infect(hInflictor, hInfected, bKeepPosition)
     local vecOrigin = hInfected:GetOrigin()
     local vecAngles = hInfected:EyeAngles()
+
+    --Give proper kill credit
+    --By killing the player before they suicide from SetTeam
+    if hInflictor then
+        --SOS: Cannot get hAttacker to work
+        --CTakeDamageInfo CreateDamageInfo (handle hInflictor, handle hAttacker, Vector force, Vector hitPos, float flDamage, int damageTypes)
+        local cDamageInfo = CreateDamageInfo(hInflictor, nil, Vector(0,0,100), Vector(0,0,0), 1000, DMG_BULLET)
+        hInfected:TakeDamage(cDamageInfo)
+        DestroyDamageInfo(cDamageInfo)
+    end
+
     hInfected:SetTeam(CS_TEAM_T)
     if bKeepPosition == false then return end
     hInfected:SetOrigin(vecOrigin)
@@ -72,7 +83,7 @@ function Infect_PickMotherZombies()
     -- (in the future, when we surely get access to player's steamid and nickname from lua)
 
     for index,player in pairs(tMotherZombies) do
-        Infect(player,bSpawnType)
+        Infect(nil, player,bSpawnType)
     end
     print("Player count: " .. iPlayerCount .. ", Mother Zombies Spawned: " .. iMotherZombieCount)
 end

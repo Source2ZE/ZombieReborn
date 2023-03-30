@@ -57,7 +57,7 @@ function OnPlayerHurt(event)
     if hAttacker:GetTeam() == CS_TEAM_CT and hVictim:GetTeam() == CS_TEAM_T then
         Knockback_Apply(hAttacker, hVictim, event.dmg_health, event.weapon)
     elseif hAttacker:GetTeam() == CS_TEAM_T and hVictim:GetTeam() == CS_TEAM_CT then
-        Infect(hVictim, true)
+        Infect(hAttacker, hVictim, true)
     end
 end
 
@@ -68,8 +68,9 @@ function OnPlayerDeath(event)
     local hAttacker = EHandleToHScript(event.attacker_pawn)
     local hVictim = EHandleToHScript(event.userid_pawn)
 
+    --Prevent Infecting the player in the same tick as the player dying
     if hAttacker:GetTeam() == CS_TEAM_T and hVictim:GetTeam() == CS_TEAM_CT then
-        Infect(hVictim, true)
+        DoEntFireByInstanceHandle(hVictim, "runscriptcode", "Infect(nil, thisEntity, true)", 0, nil, nil)
     end
 end
 
