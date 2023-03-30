@@ -19,7 +19,7 @@ Convars:RegisterConvar("zr_infect_spawn_time_max", tostring(Config.Infect.SpawnT
 Convars:RegisterConvar("zr_infect_spawn_mz_ratio", tostring(Config.Infect.SpawnMZRatio), "Ratio of all Players to Mother Zombies to be spawned at round start", 0)
 Convars:RegisterConvar("zr_infect_spawn_mz_min_count", tostring(Config.Infect.SpawnMZMinCount), "Minimum amount of Mother Zombies to be spawned at round start", 0)
 
-Convars:RegisterConvar("zr_knockback_scale", tostring(knockbackConfig.Scale), "Knockback damage multiplier", 0)
+Convars:RegisterConvar("zr_knockback_scale", tostring(Config.Knockback.Scale), "Knockback damage multiplier", 0)
 
 -- Create a table to store cvars
 CVARS.Infect = {
