@@ -8,8 +8,6 @@ require "ZombieReborn.Infect"
 require "ZombieReborn.Knockback"
 require "ZombieReborn.RepeatKiller"
 
--- time after round start when tts should stop respawning
-test_repeatkiller_time = 40
 ZR_ROUND_STARTED = false
 
 Convars:SetInt("mp_autoteambalance",0)
