@@ -5,9 +5,8 @@ function EHandleToHScript(iPawnId)
     return EntIndexToHScript(bit.band(iPawnId, 0x3FFF))
 end
 
--- alter EntFireByHandle defined by Valve (which basically takes caller as the first argument)
--- to instead follow CS:GO Squirrel VScript parameter order
-function EntFireByHandle(hTarget,strInput,strValue,flDelay,hActivator,hCaller)
+-- just shorter name
+function EntFireHandle(hTarget,strInput,strValue,flDelay,hActivator,hCaller)
     return DoEntFireByInstanceHandle(hTarget,strInput,strValue,flDelay,hActivator,hCaller)
 end
 
