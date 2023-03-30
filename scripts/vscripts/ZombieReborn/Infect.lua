@@ -77,8 +77,7 @@ function Infect_PickMotherZombies()
     print("Player count: " .. iPlayerCount .. ", Mother Zombies Spawned: " .. iMotherZombieCount)
 end
 
--- hook this to OnRoundStart in main script
-function Infect_OnRoundStart()
+function Infect_OnRoundFreezeEnd()
     local iMZSpawntimeMinimum = CVARS.Infect.SpawnTimeMin
     local iMZSpawntimeMaximum = CVARS.Infect.SpawnTimeMax
     local iMZSpawntime = math.random(iMZSpawntimeMinimum,iMZSpawntimeMaximum)
