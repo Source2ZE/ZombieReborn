@@ -1,3 +1,12 @@
+# Intellij series
+.idea
+
+# Visual Studio
+.vs
+
+# Visual Studio Code
+.vscode
+
 # Compiled Lua sources
 luac.out
 

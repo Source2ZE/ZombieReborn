@@ -1,5 +1,6 @@
 print("Starting ZombieReborn!")
 
+require "util.const"
 require "util.functions"
 require "util.timers"
 require "ZombieReborn.Convars"
@@ -41,7 +42,7 @@ function SetAllHuman()
         local hController = EntIndexToHScript(i)
 
         if hController ~= nil then
-            local hPawn = hController:GetPawn():SetTeam(3)
+            hController:GetPawn():SetTeam(CS_TEAM_CT)
         end
     end
 
@@ -54,9 +55,9 @@ function OnPlayerHurt(event)
     local hAttacker = EHandleToHScript(event.attacker_pawn)
     local hVictim = EHandleToHScript(event.userid_pawn)
 
-    if hAttacker:GetTeam() == 3 and hVictim:GetTeam() == 2 then
+    if hAttacker:GetTeam() == CS_TEAM_CT and hVictim:GetTeam() == CS_TEAM_T then
         Knockback_Apply(hAttacker, hVictim, event.dmg_health, event.weapon)
-    elseif hAttacker:GetTeam() == 2 and hVictim:GetTeam() == 3 then
+    elseif hAttacker:GetTeam() == CS_TEAM_T and hVictim:GetTeam() == CS_TEAM_CT then
         Infect(hVictim, true)
     end
 end
@@ -68,7 +69,7 @@ function OnPlayerDeath(event)
     local hAttacker = EHandleToHScript(event.attacker_pawn)
     local hVictim = EHandleToHScript(event.userid_pawn)
 
-    if hAttacker:GetTeam() == 2 and hVictim:GetTeam() == 3 then
+    if hAttacker:GetTeam() == CS_TEAM_T and hVictim:GetTeam() == CS_TEAM_CT then
         Infect(hVictim, true)
     end
 end
