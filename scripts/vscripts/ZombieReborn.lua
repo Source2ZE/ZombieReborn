@@ -71,7 +71,7 @@ function OnPlayerDeath(event)
 
     --Prevent Infecting the player in the same tick as the player dying
     if hAttacker:GetTeam() == CS_TEAM_T and hVictim:GetTeam() == CS_TEAM_CT then
-        RunScriptCodeWithActivator(hVictim, "Infect(nil, activator, true)", 0, hVictim, nil)
+        DoEntFireByInstanceHandle(hVictim, "runscriptcode", "Infect(nil, thisEntity, true)", 0, nil, nil)
     end
 end
 
