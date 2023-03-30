@@ -28,7 +28,6 @@ function OnRoundStart(event)
     Convars:SetInt('mp_ignore_round_win_conditions',1)
     ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
     SetAllHuman()
-    Infect_OnRoundStart()
     DoEntFireByInstanceHandle(world,"RunScriptCode","Convars:SetInt('mp_respawn_on_death_t',0)",test_repeatkiller_time,nil,nil)
     DoEntFireByInstanceHandle(world,"RunScriptCode","Convars:SetInt('mp_ignore_round_win_conditions',0)",test_repeatkiller_time,nil,nil)
     DoEntFireByInstanceHandle(world,"RunScriptCode","Say(nil,'RepeatKiller activated',false)",test_repeatkiller_time,nil,nil)
@@ -77,7 +76,8 @@ end
 tListenerIds = {
     ListenToGameEvent("player_hurt", OnPlayerHurt, nil),
     ListenToGameEvent("player_death", OnPlayerDeath, nil),
+    ListenToGameEvent("round_start", OnRoundStart, nil),
     ListenToGameEvent("hegrenade_detonate", Knockback_OnGrenadeDetonate, nil),
     ListenToGameEvent("molotov_detonate", Knockback_OnMolotovDetonate, nil),
-    ListenToGameEvent("round_start", OnRoundStart, nil)
+    ListenToGameEvent("round_freeze_end", Infect_OnRoundFreezeEnd, nil)
 }
