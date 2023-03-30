@@ -6,9 +6,8 @@ require "util.timers"
 require "ZombieReborn.Convars"
 require "ZombieReborn.Infect"
 require "ZombieReborn.Knockback"
+require "ZombieReborn.RepeatKiller"
 
--- time after round start when tts should stop respawning
-test_repeatkiller_time = 40
 ZR_ROUND_STARTED = false
 
 Convars:SetInt("mp_autoteambalance",0)
@@ -29,9 +28,7 @@ function OnRoundStart(event)
     Convars:SetInt('mp_ignore_round_win_conditions',1)
     ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
     SetAllHuman()
-    DoEntFireByInstanceHandle(world,"RunScriptCode","Convars:SetInt('mp_respawn_on_death_t',0)",test_repeatkiller_time,nil,nil)
-    DoEntFireByInstanceHandle(world,"RunScriptCode","Convars:SetInt('mp_ignore_round_win_conditions',0)",test_repeatkiller_time,nil,nil)
-    DoEntFireByInstanceHandle(world,"RunScriptCode","Say(nil,'RepeatKiller activated',false)",test_repeatkiller_time,nil,nil)
+    SetupRepeatKiller()
     ZR_ROUND_STARTED = true
 end
 
