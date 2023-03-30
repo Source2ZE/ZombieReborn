@@ -17,7 +17,14 @@ function Infect_PickMotherZombies()
     local tMotherZombies = {}
 
     if iMotherZombieCount < iMZMinimumCount then iMotherZombieCount = iMZMinimumCount end
-
+    
+    -- remove players that belong to invalid teams from player table before proceeding with first infection logic
+    for key,player in ipairs(tPlayerTable) do
+        if player:GetTeam() < 2 then
+            table.remove(tPlayerTable,key)
+        end
+    end
+    
     -- make players who've been picked as MZ recently less likely to be picked again
     -- store a variable in player's script scope, which gets initialized with value 100 if they are picked to be a mother zombie
     -- the value represents a % chance of the player being skipped next time they are picked to be a mother zombie
@@ -35,24 +42,22 @@ function Infect_PickMotherZombies()
 
         for idx = 1, #tPlayerTableShuffled do
             local hPlayer = tPlayerTableShuffled[idx]
-            if hPlayer:GetTeam() == CS_TEAM_T or hPlayer:GetTeam() == CS_TEAM_CT then
-                local tPlayerScope = hPlayer:GetOrCreatePrivateScriptScope()
+            local tPlayerScope = hPlayer:GetOrCreatePrivateScriptScope()
 
-                local iSkipChance = tPlayerScope.MZSpawn_SkipChance or 0
-                -- if MZSpawn_SkipChance is not initialized, then the if below is guaranteed to not pass
-                -- Roll for player's chance to skip being picked as MZ
-                if math.random(1, 100) <= iSkipChance then
-                    -- player succeeded the roll and avoided being picked as MZ,
-                    -- reduce the value of his SkipChance script scope variable (just for good measure)
-                    tPlayerScope.MZSpawn_SkipChance = tPlayerScope.MZSpawn_SkipChance - 20
-                else
-                    -- player failed the roll, pick him as MZ and initialize/refresh value of the SkipChance variable in his script scope
-                    tPlayerScope.MZSpawn_SkipChance = 100
-                    table.insert(tMotherZombies, hPlayer)
+            local iSkipChance = tPlayerScope.MZSpawn_SkipChance or 0
+            -- if MZSpawn_SkipChance is not initialized, then the if below is guaranteed to not pass
+            -- Roll for player's chance to skip being picked as MZ
+            if math.random(1, 100) <= iSkipChance then
+                -- player succeeded the roll and avoided being picked as MZ,
+                -- reduce the value of his SkipChance script scope variable (just for good measure)
+                tPlayerScope.MZSpawn_SkipChance = tPlayerScope.MZSpawn_SkipChance - 20
+            else
+                -- player failed the roll, pick him as MZ and initialize/refresh value of the SkipChance variable in his script scope
+                tPlayerScope.MZSpawn_SkipChance = 100
+                table.insert(tMotherZombies, hPlayer)
 
-                    -- remove player from players table so they can't be chosen again
-                    table.RemoveValue(tPlayerTable, hPlayer)
-                end
+                -- remove player from players table so they can't be chosen again
+                table.RemoveValue(tPlayerTable, hPlayer)
             end
 
             if #tMotherZombies == iMotherZombieCount then return end
