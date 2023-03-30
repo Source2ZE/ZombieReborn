@@ -24,6 +24,8 @@ end
 
 -- round start logic
 function OnRoundStart(event)
+    ZR_ZOMBIE_SPAWNED = false
+
     world = Entities:FindByClassname(nil,"worldent")
 
     Convars:SetInt("mp_respawn_on_death_t",1)
@@ -34,7 +36,6 @@ function OnRoundStart(event)
     DoEntFireByInstanceHandle(world,"RunScriptCode","Convars:SetInt('mp_ignore_round_win_conditions',0)",test_repeatkiller_time,nil,nil)
     DoEntFireByInstanceHandle(world,"RunScriptCode","Say(nil,'RepeatKiller activated',false)",test_repeatkiller_time,nil,nil)
     ZR_ROUND_STARTED = true
-    ZR_ZOMBIE_SPAWNED = false
 end
 
 function SetAllHuman()
@@ -79,7 +80,7 @@ function OnPlayerDeath(event)
     -- Infect Humans that died after first infection has started
     if ZR_ROUND_STARTED and ZR_ZOMBIE_SPAWNED and hVictim:GetTeam() == CS_TEAM_CT then
         --Prevent Infecting the player in the same tick as the player dying
-        DoEntFireByInstanceHandle(hVictim, "runscriptcode", "Infect(nil, thisEntity, true)", 0.1, nil, nil)
+        DoEntFireByInstanceHandle(hVictim, "runscriptcode", "Infect(nil, thisEntity, false)", 0.1, nil, nil)
     end
 end
 
