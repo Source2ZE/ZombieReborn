@@ -81,9 +81,12 @@ function Infect_PickMotherZombies()
     -- (in the future, when we surely get access to player's steamid and nickname from lua)
 
     for index,player in pairs(tMotherZombies) do
-        Infect(nil, player,bSpawnType)
+        Infect(nil, player, bSpawnType)
     end
     print("Player count: " .. iPlayerCount .. ", Mother Zombies Spawned: " .. iMotherZombieCount)
+
+    -- Mother zombie spawned
+    ZR_ZOMBIE_SPAWNED = true
 end
 
 function Infect_OnRoundFreezeEnd()
