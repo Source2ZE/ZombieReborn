@@ -1,6 +1,5 @@
 -- Registering convars seems to be broken at the moment, so we currently expose the default values as variables as well
 
--- Infect
 local Config = {
     Infect = {
         SpawnType = 1,
@@ -23,7 +22,7 @@ Convars:RegisterConvar("zr_infect_spawn_mz_min_count", tostring(Config.Infect.Sp
 Convars:RegisterConvar("zr_knockback_scale", tostring(knockbackConfig.Scale), "Knockback damage multiplier", 0)
 
 -- Create a table to store cvars
-Convars.Infect = {
+CVARS.Infect = {
     SpawnType = Convars:GetInt("zr_infect_spawn_type") or Config.Infect.SpawnType,
     SpawnTimeMin = Convars:GetInt("zr_infect_spawn_time_min") or Config.Infect.SpawnTimeMin,
     SpawnTimeMax = Convars:GetInt("zr_infect_spawn_time_max") or Config.Infect.SpawnTimeMax,
@@ -31,6 +30,6 @@ Convars.Infect = {
     SpawnMZMinCount = Convars:GetInt("zr_infect_spawn_mz_min_count") or Config.Infect.SpawnMZMinCount
 }
 
-Convars.Knockback = {
+CVARS.Knockback = {
     Scale = Convars:GetInt("zr_knockback_scale") or Config.Knockback.Scale
 }
