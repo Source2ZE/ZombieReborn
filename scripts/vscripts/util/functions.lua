@@ -14,3 +14,13 @@ function table.shuffle(tbl)
     end
     return tbl
 end
+
+-- removes all instances of a given value
+-- from a given table
+function table.RemoveValue(tbl, value)
+    for i = #tbl, 1, -1 do
+        if tbl[i] == value then
+            table.remove(tbl, i)
+        end
+    end
+end
