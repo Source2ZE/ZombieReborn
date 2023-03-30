@@ -35,22 +35,24 @@ function Infect_PickMotherZombies()
 
         for idx = 1, #tPlayerTableShuffled do
             local hPlayer = tPlayerTableShuffled[idx]
-            local tPlayerScope = hPlayer:GetOrCreatePrivateScriptScope()
+            if hPlayer:GetTeam() == CS_TEAM_T or hPlayer:GetTeam() == CS_TEAM_CT then
+                local tPlayerScope = hPlayer:GetOrCreatePrivateScriptScope()
 
-            local iSkipChance = tPlayerScope.MZSpawn_SkipChance or 0
-            -- if MZSpawn_SkipChance is not initialized, then the if below is guaranteed to not pass
-            -- Roll for player's chance to skip being picked as MZ
-            if math.random(1, 100) <= iSkipChance then
-                -- player succeeded the roll and avoided being picked as MZ,
-                -- reduce the value of his SkipChance script scope variable (just for good measure)
-                tPlayerScope.MZSpawn_SkipChance = tPlayerScope.MZSpawn_SkipChance - 20
-            else
-                -- player failed the roll, pick him as MZ and initialize/refresh value of the SkipChance variable in his script scope
-                tPlayerScope.MZSpawn_SkipChance = 100
-                table.insert(tMotherZombies, hPlayer)
-                
-                -- remove player from players table so they can't be chosen again
-                table.RemoveValue(tPlayerTable, hPlayer)
+                local iSkipChance = tPlayerScope.MZSpawn_SkipChance or 0
+                -- if MZSpawn_SkipChance is not initialized, then the if below is guaranteed to not pass
+                -- Roll for player's chance to skip being picked as MZ
+                if math.random(1, 100) <= iSkipChance then
+                    -- player succeeded the roll and avoided being picked as MZ,
+                    -- reduce the value of his SkipChance script scope variable (just for good measure)
+                    tPlayerScope.MZSpawn_SkipChance = tPlayerScope.MZSpawn_SkipChance - 20
+                else
+                    -- player failed the roll, pick him as MZ and initialize/refresh value of the SkipChance variable in his script scope
+                    tPlayerScope.MZSpawn_SkipChance = 100
+                    table.insert(tMotherZombies, hPlayer)
+
+                    -- remove player from players table so they can't be chosen again
+                    table.RemoveValue(tPlayerTable, hPlayer)
+                end
             end
 
             if #tMotherZombies == iMotherZombieCount then return end
