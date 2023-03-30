@@ -1,5 +1,3 @@
-require "ZombieReborn.Convars"
-
 function Infect(hInflictor, hInfected, bKeepPosition)
     local vecOrigin = hInfected:GetOrigin()
     local vecAngles = hInfected:EyeAngles()

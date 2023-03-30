@@ -1,5 +1,3 @@
-require "ZombieReborn.Convars"
-
 tWeaponConfigs = LoadKeyValues("cfg\\zr\\weapons.cfg")
 
 function Knockback_Apply(hHuman, hZombie, iDamage, sWeapon)
