@@ -78,8 +78,8 @@ function OnPlayerDeath(event)
 
     -- Infect Humans that died after first infection has started
     if ZR_ROUND_STARTED and ZR_ZOMBIE_SPAWNED and hVictim:GetTeam() == CS_TEAM_CT then
-        --print("infecting suicide")
-        Infect(nil, hVictim, bSpawnType)
+        --Prevent Infecting the player in the same tick as the player dying
+        DoEntFireByInstanceHandle(hVictim, "runscriptcode", "Infect(nil, thisEntity, true)", 0.1, nil, nil)
     end
 end
 
