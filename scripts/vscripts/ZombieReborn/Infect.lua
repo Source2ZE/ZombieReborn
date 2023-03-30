@@ -24,6 +24,13 @@ function Infect_PickMotherZombies()
     -- If the player is skipped, next random player is picked to be mother zombie (and same skip chance logic applies to him)
     -- the variable gets decreased by 20 every round (if it exists inside player's scope)
     local function PickMotherZombies()
+        
+        -- No players to choose from
+        if tPlayerTable == nil or #tPlayerTable == 0 then
+            iMotherZombieCount = #tMotherZombies
+            return
+        end
+        
         local tPlayerTableShuffled = table.shuffle(tPlayerTable)
 
         for idx = 1, #tPlayerTableShuffled do
