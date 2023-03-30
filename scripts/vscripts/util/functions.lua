@@ -5,6 +5,12 @@ function EHandleToHScript(iPawnId)
     return EntIndexToHScript(bit.band(iPawnId, 0x3FFF))
 end
 
+-- alter EntFireByHandle defined by Valve (which basically takes caller as the first argument)
+-- to instead follow CS:GO Squirrel VScript parameter order
+function EntFireByHandle(hTarget,strInput,strValue,flDelay,hActivator,hCaller)
+    return DoEntFireByInstanceHandle(hTarget,strInput,strValue,flDelay,hActivator,hCaller)
+end
+
 -- shuffles positions of elements in an array
 -- usable only for array type of tables (when keys are not strings)
 function table.shuffle(tbl)
