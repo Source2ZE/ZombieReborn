@@ -8,8 +8,10 @@ An experimental implementation of Zombie Escape in Counter-Strike 2 using the Lu
 
 Copy both the `scripts` and `cfg` directories to your `game/csgo` folder. If you've already made changes to your server cfg's, you may want to just copy the contents of ours in instead.
 
+Knockback will not function out of the box, as Movement Unlocker is required similar to CS:GO. See pins in our Discord's #plugins-and-re channel for instructions on manually patching Movement Unlocker until there is some plugin API available to do it in.
+
 ## Current issues
-You can find the current issues with CS2 we'd like to report to Valve [here](../../wiki/CS2-Issues)
+You can find the current issues with CS2 we'd like to report to Valve [here](../../wiki/CS2-Issues).
 
 ## The Future?
 
