@@ -10,9 +10,9 @@ function Infect(hInfected, bKeepPosition)
 end
 
 function Infect_PickMotherZombies()
-    local iMZRatio = Convars.infect.SpawnMZRatio
-    local iMZMinimumCount = Convars.infect.SpawnMZMinCount
-    local bSpawnType = (Convars.infect.SpawnType == 0)
+    local iMZRatio = Convars.Infect.SpawnMZRatio
+    local iMZMinimumCount = Convars.Infect.SpawnMZMinCount
+    local bSpawnType = (Convars.Infect.SpawnType == 0)
     local tPlayerTable = Entities:FindAllByClassname("player")
     local iPlayerCount = #tPlayerTable--also counting spectators
     local iMotherZombieCount = math.floor(iPlayerCount / iMZRatio)
@@ -72,8 +72,8 @@ end
 
 -- hook this to OnRoundStart in main script
 function Infect_OnRoundStart()
-    local iMZSpawntimeMinimum = Convars.infect.SpawnTimeMin
-    local iMZSpawntimeMaximum = Convars.infect.SpawnTimeMax
+    local iMZSpawntimeMinimum = Convars.Infect.SpawnTimeMin
+    local iMZSpawntimeMaximum = Convars.Infect.SpawnTimeMax
     local iMZSpawntime = math.random(iMZSpawntimeMinimum,iMZSpawntimeMaximum)
 
     -- reduce mother zombie spawn skip chance for players who have that variable in their script scope
