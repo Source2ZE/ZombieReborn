@@ -1,6 +1,6 @@
 require "ZombieReborn.Convars"
 
-function Infect(hInfected, bKeepPosition)
+function Infect(hInflictor, hInfected, bKeepPosition)
     local vecOrigin = hInfected:GetOrigin()
     local vecAngles = hInfected:EyeAngles()
     hInfected:SetTeam(CS_TEAM_T)
