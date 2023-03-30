@@ -1,3 +1,5 @@
+require "ZombieReborn.Convars"
+
 function Infect(hInfected, bKeepPosition)
     local vecOrigin = hInfected:GetOrigin()
     local vecAngles = hInfected:EyeAngles()
@@ -8,9 +10,9 @@ function Infect(hInfected, bKeepPosition)
 end
 
 function Infect_PickMotherZombies()
-    local iMZRatio = (Convars:GetInt("zr_infect_spawn_mz_ratio") or iInfectSpawnMZRatio)
-    local iMZMinimumCount = (Convars:GetInt("zr_infect_spawn_mz_min_count") or iInfectSpawnMZMinCount)
-    local bSpawnType = ((Convars:GetInt("zr_infect_spawn_type") or iInfectSpawnType) == 0)
+    local iMZRatio = Convars.infect.SpawnMZRatio
+    local iMZMinimumCount = Convars.infect.SpawnMZMinCount
+    local bSpawnType = (Convars.infect.SpawnType == 0)
     local tPlayerTable = Entities:FindAllByClassname("player")
     local iPlayerCount = #tPlayerTable--also counting spectators
     local iMotherZombieCount = math.floor(iPlayerCount / iMZRatio)
@@ -70,8 +72,8 @@ end
 
 -- hook this to OnRoundStart in main script
 function Infect_OnRoundStart()
-    local iMZSpawntimeMinimum = (Convars:GetInt("zr_infect_spawn_time_min") or iInfectSpawntimeMin)
-    local iMZSpawntimeMaximum = (Convars:GetInt("zr_infect_spawn_time_max") or iInfectSpawntimeMax)
+    local iMZSpawntimeMinimum = Convars.infect.SpawnTimeMin
+    local iMZSpawntimeMaximum = Convars.infect.SpawnTimeMax
     local iMZSpawntime = math.random(iMZSpawntimeMinimum,iMZSpawntimeMaximum)
 
     -- reduce mother zombie spawn skip chance for players who have that variable in their script scope

@@ -1,7 +1,9 @@
+require "ZombieReborn.Convars"
+
 tWeaponConfigs = LoadKeyValues("cfg\\zr\\weapons.cfg")
 
 function Knockback_Apply(hHuman, hZombie, iDamage, sWeapon)
-    local iScale = (Convars:GetInt("zr_knockback_scale") or iKnockbackScale)
+    local iScale = Convars.knockback.Scale
 
     if tWeaponConfigs and tWeaponConfigs[sWeapon] and tWeaponConfigs[sWeapon].knockback then
         iScale = iScale * tWeaponConfigs[sWeapon].knockback
