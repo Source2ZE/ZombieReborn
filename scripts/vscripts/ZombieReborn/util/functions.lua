@@ -5,6 +5,13 @@ function EHandleToHScript(iPawnId)
     return EntIndexToHScript(bit.band(iPawnId, 0x3FFF))
 end
 
+--Dump the contents of a table
+function table.dump(tbl)
+    for k, v in pairs(tbl) do
+        print(k, v)
+    end
+end
+
 -- shuffles positions of elements in an array
 -- usable only for array type of tables (when keys are not strings)
 function table.shuffle(tbl)

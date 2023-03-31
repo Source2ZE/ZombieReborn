@@ -1,6 +1,17 @@
-function Infect(hInfected, bKeepPosition)
+function Infect(hInflictor, hInfected, bKeepPosition)
     local vecOrigin = hInfected:GetOrigin()
     local vecAngles = hInfected:EyeAngles()
+
+    --Give proper kill credit
+    --By killing the player before they suicide from SetTeam
+    if hInflictor then
+        --SOS: Cannot get hAttacker to work
+        --CTakeDamageInfo CreateDamageInfo (handle hInflictor, handle hAttacker, Vector force, Vector hitPos, float flDamage, int damageTypes)
+        local cDamageInfo = CreateDamageInfo(hInflictor, nil, Vector(0,0,100), Vector(0,0,0), 1000, DMG_BULLET)
+        hInfected:TakeDamage(cDamageInfo)
+        DestroyDamageInfo(cDamageInfo)
+    end
+
     hInfected:SetTeam(CS_TEAM_T)
     if bKeepPosition == false then return end
     hInfected:SetOrigin(vecOrigin)
@@ -8,16 +19,23 @@ function Infect(hInfected, bKeepPosition)
 end
 
 function Infect_PickMotherZombies()
-    local iMZRatio = (Convars:GetInt("zr_infect_spawn_mz_ratio") or iInfectSpawnMZRatio)
-    local iMZMinimumCount = (Convars:GetInt("zr_infect_spawn_mz_min_count") or iInfectSpawnMZMinCount)
-    local bSpawnType = ((Convars:GetInt("zr_infect_spawn_type") or iInfectSpawnType) == 0)
+    local iMZRatio = CVARS.Infect.SpawnMZRatio
+    local iMZMinimumCount = CVARS.Infect.SpawnMZMinCount
+    local bSpawnType = (CVARS.Infect.SpawnType == 0)
     local tPlayerTable = Entities:FindAllByClassname("player")
     local iPlayerCount = #tPlayerTable--also counting spectators
     local iMotherZombieCount = math.floor(iPlayerCount / iMZRatio)
     local tMotherZombies = {}
 
     if iMotherZombieCount < iMZMinimumCount then iMotherZombieCount = iMZMinimumCount end
-
+    
+    -- remove players that belong to invalid teams from player table before proceeding with first infection logic
+    for key,player in ipairs(tPlayerTable) do
+        if player:GetTeam() < 2 then
+            table.remove(tPlayerTable,key)
+        end
+    end
+    
     -- make players who've been picked as MZ recently less likely to be picked again
     -- store a variable in player's script scope, which gets initialized with value 100 if they are picked to be a mother zombie
     -- the value represents a % chance of the player being skipped next time they are picked to be a mother zombie
@@ -48,7 +66,7 @@ function Infect_PickMotherZombies()
                 -- player failed the roll, pick him as MZ and initialize/refresh value of the SkipChance variable in his script scope
                 tPlayerScope.MZSpawn_SkipChance = 100
                 table.insert(tMotherZombies, hPlayer)
-                
+
                 -- remove player from players table so they can't be chosen again
                 table.RemoveValue(tPlayerTable, hPlayer)
             end
@@ -63,15 +81,17 @@ function Infect_PickMotherZombies()
     -- (in the future, when we surely get access to player's steamid and nickname from lua)
 
     for index,player in pairs(tMotherZombies) do
-        Infect(player,bSpawnType)
+        Infect(nil, player, bSpawnType)
     end
     print("Player count: " .. iPlayerCount .. ", Mother Zombies Spawned: " .. iMotherZombieCount)
+
+    -- Mother zombie spawned
+    ZR_ZOMBIE_SPAWNED = true
 end
 
--- hook this to OnRoundStart in main script
-function Infect_OnRoundStart()
-    local iMZSpawntimeMinimum = (Convars:GetInt("zr_infect_spawn_time_min") or iInfectSpawntimeMin)
-    local iMZSpawntimeMaximum = (Convars:GetInt("zr_infect_spawn_time_max") or iInfectSpawntimeMax)
+function Infect_OnRoundFreezeEnd()
+    local iMZSpawntimeMinimum = CVARS.Infect.SpawnTimeMin
+    local iMZSpawntimeMaximum = CVARS.Infect.SpawnTimeMax
     local iMZSpawntime = math.random(iMZSpawntimeMinimum,iMZSpawntimeMaximum)
 
     -- reduce mother zombie spawn skip chance for players who have that variable in their script scope
