@@ -239,6 +239,13 @@ function Timers:RemoveTimers(killAll)
     Timers.timers = timers
 end
 
+function Timers:TimerExists(name)
+    if Timers.timers[name] == nil then
+        return false
+    end
+    return true
+end
+
 if not Timers.timers then Timers:start() end
 
 return Timers
