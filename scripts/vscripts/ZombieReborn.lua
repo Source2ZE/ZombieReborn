@@ -4,6 +4,7 @@ require "ZombieReborn.util.const"
 require "ZombieReborn.util.functions"
 require "ZombieReborn.util.timers"
 
+require "ZombieReborn/GrenadeRemover"
 require "ZombieReborn.Convars"
 require "ZombieReborn.Infect"
 require "ZombieReborn.Knockback"
@@ -98,5 +99,6 @@ tListenerIds = {
     ListenToGameEvent("round_start", OnRoundStart, nil),
     ListenToGameEvent("hegrenade_detonate", Knockback_OnGrenadeDetonate, nil),
     ListenToGameEvent("molotov_detonate", Knockback_OnMolotovDetonate, nil),
-    ListenToGameEvent("round_freeze_end", Infect_OnRoundFreezeEnd, nil)
+    ListenToGameEvent("round_freeze_end", Infect_OnRoundFreezeEnd, nil),
+    ListenToGameEvent("weapon_fire", RemoveGrenade, nil),
 }
