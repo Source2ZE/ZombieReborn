@@ -1,8 +1,9 @@
 print("Starting ZombieReborn!")
 
-require "util.const"
-require "util.functions"
-require "util.timers"
+require "ZombieReborn.util.const"
+require "ZombieReborn.util.functions"
+require "ZombieReborn.util.timers"
+
 require "ZombieReborn.Convars"
 require "ZombieReborn.Infect"
 require "ZombieReborn.Knockback"
