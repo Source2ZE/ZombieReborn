@@ -25,12 +25,11 @@ function RemoveGrenade(event)
 
                 for key, value in ipairs(tGrenades) do
                     if value == hWeapon:GetClassname() then
-                        -- Create only one clientcommand to avoid string table leak
-                        if Entities:FindByClassname(nil, "point_clientcommand") == nil then
-                            local hClientCMD = SpawnEntityFromTableSynchronous("point_clientcommand", nil)
+                        local hClientCMD = Entities:FindByClassname(nil, "point_clientcommand")
+
+                        if not hClientCMD then
+                            hClientCMD = SpawnEntityFromTableSynchronous("point_clientcommand", nil)
                         end
-                        -- Reassign the variable because lua is awful
-                        hClientCMD = Entities:FindByClassname(nil, "point_clientcommand")
 
                         -- Remove the grenade (delay it else bug happens)
                         DoEntFireByInstanceHandle(hWeapon, "Kill", "", 0.10, nil, nil)
