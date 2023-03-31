@@ -28,6 +28,15 @@ function OnRoundStart(event)
 
     world = Entities:FindByClassname(nil,"worldent")
 
+     -- Delete previous timer and make new once
+     Timers:RemoveTimer("zr_ammo_timer")
+     Timers:CreateTimer("zr_ammo_timer", {
+         callback = function()
+         DoEntFire("weapon_*", "SetReserveAmmoAmount", "999", 0, nil, nil)
+         return 5
+     end
+    })   
+
     Convars:SetInt("mp_respawn_on_death_t",1)
     Convars:SetInt('mp_ignore_round_win_conditions',1)
     ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
