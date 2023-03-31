@@ -9,6 +9,7 @@ require "ZombieReborn.Knockback"
 require "ZombieReborn.RepeatKiller"
 
 ZR_ROUND_STARTED = false
+ZR_ZOMBIE_SPAWNED = false -- Check if first zombie spawned
 
 Convars:SetInt("mp_autoteambalance",0)
 Convars:SetInt("mp_limitteams",0)
@@ -22,6 +23,8 @@ end
 
 -- round start logic
 function OnRoundStart(event)
+    ZR_ZOMBIE_SPAWNED = false
+
     world = Entities:FindByClassname(nil,"worldent")
 
     Convars:SetInt("mp_respawn_on_death_t",1)
@@ -69,6 +72,12 @@ function OnPlayerDeath(event)
     --Prevent Infecting the player in the same tick as the player dying
     if hAttacker:GetTeam() == CS_TEAM_T and hVictim:GetTeam() == CS_TEAM_CT then
         DoEntFireByInstanceHandle(hVictim, "runscriptcode", "Infect(nil, thisEntity, true)", 0, nil, nil)
+    end
+
+    -- Infect Humans that died after first infection has started
+    if ZR_ROUND_STARTED and ZR_ZOMBIE_SPAWNED and hVictim:GetTeam() == CS_TEAM_CT then
+        --Prevent Infecting the player in the same tick as the player dying
+        DoEntFireByInstanceHandle(hVictim, "runscriptcode", "Infect(nil, thisEntity, false)", 0.1, nil, nil)
     end
 end
 
