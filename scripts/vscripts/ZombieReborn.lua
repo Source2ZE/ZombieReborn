@@ -84,9 +84,19 @@ function OnPlayerDeath(event)
     end
 end
 
+-- Infect late spawners
+function OnPlayerSpawn(event)
+    local hPlayer = EHandleToHScript(event.userid_pawn)
+
+    if ZR_ZOMBIE_SPAWNED and hPlayer:GetTeam() == CS_TEAM_CT then
+        Infect(nil, hPlayer, true)
+    end
+end
+
 tListenerIds = {
     ListenToGameEvent("player_hurt", OnPlayerHurt, nil),
     ListenToGameEvent("player_death", OnPlayerDeath, nil),
+    ListenToGameEvent("player_spawn", OnPlayerSpawn, nil),
     ListenToGameEvent("round_start", OnRoundStart, nil),
     ListenToGameEvent("hegrenade_detonate", Knockback_OnGrenadeDetonate, nil),
     ListenToGameEvent("molotov_detonate", Knockback_OnMolotovDetonate, nil),
