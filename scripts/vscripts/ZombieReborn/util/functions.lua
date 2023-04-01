@@ -16,7 +16,7 @@ end
 -- usable only for array type of tables (when keys are not strings)
 function table.shuffle(tbl)
     for i = #tbl, 2, -1 do
-        local j = math.random(i)
+        local j = RandomInt(1, i)
         tbl[i], tbl[j] = tbl[j], tbl[i]
     end
     return tbl
