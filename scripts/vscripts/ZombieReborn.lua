@@ -97,6 +97,7 @@ end
 
 -- Infect late spawners
 function OnPlayerSpawn(event)
+    --__DumpScope(0, event)
     local hPlayer = EHandleToHScript(event.userid_pawn)
 
     if ZR_ZOMBIE_SPAWNED and hPlayer:GetTeam() == CS_TEAM_CT then
@@ -108,7 +109,6 @@ function OnItemEquip(event)
     --__DumpScope(0, event)
     local hPlayer = EHandleToHScript(event.userid_pawn)
 
-    -- if player is T and weapon equipped is not knife
     if ZR_ZOMBIE_SPAWNED and hPlayer:GetTeam() == CS_TEAM_T then
         local tInventory = hPlayer:GetEquippedWeapons()
         for key, value in ipairs(tInventory) do
