@@ -8,6 +8,7 @@ require "ZombieReborn.Convars"
 require "ZombieReborn.Infect"
 require "ZombieReborn.Knockback"
 require "ZombieReborn.RepeatKiller"
+require "ZombieReborn.AmmoReplenish"
 
 ZR_ROUND_STARTED = false
 ZR_ZOMBIE_SPAWNED = false -- Check if first zombie spawned
@@ -32,22 +33,14 @@ function OnRoundStart(event)
     if clientcmd == nil then
         clientcmd = SpawnEntityFromTableSynchronous("point_clientcommand", {targetname="vscript_clientcommand"})
     end
-    
-    -- Create timer to replenish ammo
-    if not Timers:TimerExists(zr_ammo_timer) then
-        Timers:CreateTimer("zr_ammo_timer", {
-            callback = function()
-            DoEntFire("weapon_*", "SetReserveAmmoAmount", "999", 0, nil, nil)
-            return 5
-        end
-        })        
-    end
 
     Convars:SetInt("mp_respawn_on_death_t",1)
     Convars:SetInt('mp_ignore_round_win_conditions',1)
     ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
+    
     SetAllHuman()
     SetupRepeatKiller()
+    SetupAmmoReplenish()
     
     ZR_ROUND_STARTED = true
 end
