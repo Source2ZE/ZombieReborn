@@ -8,6 +8,7 @@ require "ZombieReborn.Convars"
 require "ZombieReborn.Infect"
 require "ZombieReborn.Knockback"
 require "ZombieReborn.RepeatKiller"
+require "ZombieReborn.ZombieHealth"
 
 ZR_ROUND_STARTED = false
 ZR_ZOMBIE_SPAWNED = false -- Check if first zombie spawned
@@ -45,6 +46,7 @@ function OnRoundStart(event)
     ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
     SetAllHuman()
     SetupRepeatKiller()
+    SetupZombieHealth()
     
     ZR_ROUND_STARTED = true
 end
@@ -69,9 +71,11 @@ function OnPlayerHurt(event)
     local hAttacker = EHandleToHScript(event.attacker_pawn)
     local hVictim = EHandleToHScript(event.userid_pawn)
 
+    PauseZombieHealthRecovery(hVictim)
     if hAttacker:GetTeam() == CS_TEAM_CT and hVictim:GetTeam() == CS_TEAM_T then
         Knockback_Apply(hAttacker, hVictim, event.dmg_health, event.weapon)
     elseif hAttacker:GetTeam() == CS_TEAM_T and hVictim:GetTeam() == CS_TEAM_CT then
+        SetZombieHealthRecordInfection(hAttacker, hVictim)
         Infect(hAttacker, hVictim, true)
     end
 end
@@ -85,6 +89,7 @@ function OnPlayerDeath(event)
 
     --Prevent Infecting the player in the same tick as the player dying
     if hAttacker:GetTeam() == CS_TEAM_T and hVictim:GetTeam() == CS_TEAM_CT then
+        SetZombieHealthRecordInfection(hAttacker, hVictim)
         DoEntFireByInstanceHandle(hVictim, "runscriptcode", "Infect(nil, thisEntity, true)", 0, nil, nil)
     end
 
@@ -101,7 +106,7 @@ function OnPlayerSpawn(event)
     local hPlayer = EHandleToHScript(event.userid_pawn)
 
     if ZR_ZOMBIE_SPAWNED and hPlayer:GetTeam() == CS_TEAM_CT then
-        Infect(nil, hPlayer, true)
+        Infect(nil, hPlayer, true, nil)
     end
 end
 

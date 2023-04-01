@@ -13,6 +13,8 @@ function Infect(hInflictor, hInfected, bKeepPosition)
     end
 
     hInfected:SetTeam(CS_TEAM_T)
+    ApplyMaxHealthOnInfection(hInfected)
+
     if bKeepPosition == false then return end
     hInfected:SetOrigin(vecOrigin)
     hInfected:SetAngles(vecAngles.x, vecAngles.y, vecAngles.z)
@@ -80,7 +82,9 @@ function Infect_PickMotherZombies()
     -- can iterate over the tMotherZombies here to print players who got picked as MZ to console
     -- (in the future, when we surely get access to player's steamid and nickname from lua)
 
+    local iHealthPerZombie = iPlayerCount * 350 / iMotherZombieCount
     for index,player in pairs(tMotherZombies) do
+        SetZombieHealthRecord(player, iHealthPerZombie)
         Infect(nil, player, bSpawnType)
     end
     print("Player count: " .. iPlayerCount .. ", Mother Zombies Spawned: " .. iMotherZombieCount)

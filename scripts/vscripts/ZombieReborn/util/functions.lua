@@ -5,6 +5,10 @@ function EHandleToHScript(iPawnId)
     return EntIndexToHScript(bit.band(iPawnId, 0x3FFF))
 end
 
+function PrintLuaError(e)
+    print("Lua error: " .. e .. "\n" .. debug.traceback())
+end
+
 --Dump the contents of a table
 function table.dump(tbl)
     for k, v in pairs(tbl) do
