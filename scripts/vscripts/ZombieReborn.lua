@@ -111,8 +111,8 @@ function OnItemEquip(event)
 
     if ZR_ZOMBIE_SPAWNED and hPlayer:GetTeam() == CS_TEAM_T then
         local tInventory = hPlayer:GetEquippedWeapons()
+
         for key, value in ipairs(tInventory) do
-            print(value:GetClassname())
             if value:GetClassname() ~= "weapon_knife" then
                 value:Destroy()
                 DoEntFireByInstanceHandle(clientcmd, "command", "lastinv", 0.1, hPlayer, hPlayer)
