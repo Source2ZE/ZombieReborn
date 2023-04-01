@@ -26,6 +26,10 @@ end
 function OnRoundStart(event)
     ZR_ZOMBIE_SPAWNED = false
 
+    -- Create clientcommand for weapon swapping
+    if Entities:FindByClassname(nil, "point_clientcommand") == nil then
+        clientcmd = SpawnEntityFromTableSynchronous("point_clientcommand", {targetname="vscript_clientcommand"})
+    end
     -- Create timer to replenish ammo
     if not Timers:TimerExists(zr_ammo_timer) then
         Timers:CreateTimer("zr_ammo_timer", {
@@ -100,6 +104,24 @@ function OnPlayerSpawn(event)
     end
 end
 
+function OnItemEquip(event)
+    --__DumpScope(0, event)
+    local hPlayer = EHandleToHScript(event.userid_pawn)
+
+    -- if player is T and weapon equipped is not knife
+    if ZR_ZOMBIE_SPAWNED and hPlayer:GetTeam() == CS_TEAM_T then
+        local tInventory = hPlayer:GetEquippedWeapons()
+        for key, value in ipairs(tInventory) do
+            print(value:GetClassname())
+            if value:GetClassname() ~= "weapon_knife" then
+                value:Destroy()
+                DoEntFireByInstanceHandle(clientcmd, "command", "lastinv", 0.1, hPlayer, hPlayer)
+            end
+        end
+    end
+
+end
+
 tListenerIds = {
     ListenToGameEvent("player_hurt", OnPlayerHurt, nil),
     ListenToGameEvent("player_death", OnPlayerDeath, nil),
@@ -107,5 +129,6 @@ tListenerIds = {
     ListenToGameEvent("round_start", OnRoundStart, nil),
     ListenToGameEvent("hegrenade_detonate", Knockback_OnGrenadeDetonate, nil),
     ListenToGameEvent("molotov_detonate", Knockback_OnMolotovDetonate, nil),
-    ListenToGameEvent("round_freeze_end", Infect_OnRoundFreezeEnd, nil)
+    ListenToGameEvent("round_freeze_end", Infect_OnRoundFreezeEnd, nil),
+    ListenToGameEvent("item_equip", OnItemEquip, nil)
 }
