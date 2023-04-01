@@ -26,10 +26,14 @@ end
 function OnRoundStart(event)
     ZR_ZOMBIE_SPAWNED = false
 
-    -- Create clientcommand for weapon swapping
-    if Entities:FindByClassname(nil, "point_clientcommand") == nil then
-        clientcmd = SpawnEntityFromTableSynchronous("point_clientcommand", {targetname="vscript_clientcommand"})
+    -- Make sure point_clientcommand exists
+    if Entities:FindByClassname(nil, "point_clientcommand") == nil
+        then
+            clientcmd = SpawnEntityFromTableSynchronous("point_clientcommand", {targetname="vscript_clientcommand"})
+        else
+            clientcmd = Entities:FindByClassname(nil, "point_clientcommand")
     end
+    
     -- Create timer to replenish ammo
     if not Timers:TimerExists(zr_ammo_timer) then
         Timers:CreateTimer("zr_ammo_timer", {
