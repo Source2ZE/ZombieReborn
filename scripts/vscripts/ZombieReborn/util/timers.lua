@@ -240,10 +240,7 @@ function Timers:RemoveTimers(killAll)
 end
 
 function Timers:TimerExists(name)
-    if Timers.timers[name] == nil then
-        return false
-    end
-    return true
+    return not (Timers.timers[name] == nil)
 end
 
 if not Timers.timers then Timers:start() end
