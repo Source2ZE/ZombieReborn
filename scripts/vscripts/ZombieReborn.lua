@@ -42,6 +42,8 @@ function OnRoundStart(event)
     SetupRepeatKiller()
     SetupAmmoReplenish()
     
+    Timers:RemoveTimer("MZSelection_Timer")
+    
     ZR_ROUND_STARTED = true
 end
 
