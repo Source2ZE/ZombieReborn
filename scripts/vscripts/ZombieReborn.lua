@@ -8,6 +8,7 @@ require "ZombieReborn.Convars"
 require "ZombieReborn.Infect"
 require "ZombieReborn.Knockback"
 require "ZombieReborn.RepeatKiller"
+require "ZombieReborn.AmmoReplenish"
 
 ZR_ROUND_STARTED = false
 ZR_ZOMBIE_SPAWNED = false -- Check if first zombie spawned
@@ -26,21 +27,20 @@ end
 function OnRoundStart(event)
     ZR_ZOMBIE_SPAWNED = false
 
-    -- Create timer to replenish ammo
-    if not Timers:TimerExists(zr_ammo_timer) then
-        Timers:CreateTimer("zr_ammo_timer", {
-            callback = function()
-            DoEntFire("weapon_*", "SetReserveAmmoAmount", "999", 0, nil, nil)
-            return 5
-        end
-        })        
+    -- Make sure point_clientcommand exists
+    clientcmd = Entities:FindByClassname(nil, "point_clientcommand")
+	
+    if clientcmd == nil then
+        clientcmd = SpawnEntityFromTableSynchronous("point_clientcommand", {targetname="vscript_clientcommand"})
     end
 
     Convars:SetInt("mp_respawn_on_death_t",1)
     Convars:SetInt('mp_ignore_round_win_conditions',1)
     ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
+    
     SetAllHuman()
     SetupRepeatKiller()
+    SetupAmmoReplenish()
     
     ZR_ROUND_STARTED = true
 end
@@ -93,11 +93,29 @@ end
 
 -- Infect late spawners
 function OnPlayerSpawn(event)
+    --__DumpScope(0, event)
     local hPlayer = EHandleToHScript(event.userid_pawn)
 
     if ZR_ZOMBIE_SPAWNED and hPlayer:GetTeam() == CS_TEAM_CT then
         Infect(nil, hPlayer, true)
     end
+end
+
+function OnItemEquip(event)
+    --__DumpScope(0, event)
+    local hPlayer = EHandleToHScript(event.userid_pawn)
+
+    if ZR_ZOMBIE_SPAWNED and hPlayer:GetTeam() == CS_TEAM_T then
+        local tInventory = hPlayer:GetEquippedWeapons()
+
+        for key, value in ipairs(tInventory) do
+            if value:GetClassname() ~= "weapon_knife" then
+                value:Destroy()
+                DoEntFireByInstanceHandle(clientcmd, "command", "lastinv", 0.1, hPlayer, hPlayer)
+            end
+        end
+    end
+
 end
 
 tListenerIds = {
@@ -107,5 +125,6 @@ tListenerIds = {
     ListenToGameEvent("round_start", OnRoundStart, nil),
     ListenToGameEvent("hegrenade_detonate", Knockback_OnGrenadeDetonate, nil),
     ListenToGameEvent("molotov_detonate", Knockback_OnMolotovDetonate, nil),
-    ListenToGameEvent("round_freeze_end", Infect_OnRoundFreezeEnd, nil)
+    ListenToGameEvent("round_freeze_end", Infect_OnRoundFreezeEnd, nil),
+    ListenToGameEvent("item_equip", OnItemEquip, nil)
 }

@@ -1,7 +1,7 @@
 tWeaponConfigs = LoadKeyValues("cfg\\zr\\weapons.cfg")
 
 function Knockback_Apply(hHuman, hZombie, iDamage, sWeapon)
-    local iScale = CVARS.Knockback.Scale
+    local iScale = Convars:GetInt("zr_knockback_scale")
 
     if tWeaponConfigs and tWeaponConfigs[sWeapon] and tWeaponConfigs[sWeapon].knockback then
         iScale = iScale * tWeaponConfigs[sWeapon].knockback
