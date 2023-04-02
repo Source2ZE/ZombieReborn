@@ -52,7 +52,7 @@ luac.out
 cfg/*
 !cfg/server.cfg
 !cfg/listenserver.cfg
-!zr/*
+!cfg/zr*
 
 # Scripts besides what we ship
 scripts/vscripts/*

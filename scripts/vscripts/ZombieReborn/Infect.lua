@@ -13,6 +13,12 @@ function Infect(hInflictor, hInfected, bKeepPosition)
     end
 
     hInfected:SetTeam(CS_TEAM_T)
+
+    hInfected:SetHealth(tPlayerClasses.zombie.health)
+    hInfected:SetMaxHealth(tPlayerClasses.zombie.health)
+    hInfected:SetGravity(tPlayerClasses.zombie.gravity)
+    -- hInfected:SetModel(tPlayerClasses.zombie.model)
+
     if bKeepPosition == false then return end
     hInfected:SetOrigin(vecOrigin)
     hInfected:SetAngles(vecAngles.x, vecAngles.y, vecAngles.z)
