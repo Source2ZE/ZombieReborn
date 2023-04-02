@@ -13,6 +13,16 @@ function Infect(hInflictor, hInfected, bKeepPosition)
     end
 
     hInfected:SetTeam(CS_TEAM_T)
+    
+    -- just here for test first infection whether works properly...
+    hInfected:SetHealth(tPlayerClass.first_infection.health)
+    hInfected:SetMaxHealth(tPlayerClass.first_infection.health)
+    hInfected:SetGravity(tPlayerClass.first_infection.gravity)
+    -- hInfected:SetModel(tPlayerClass.first_infection.model)
+    -- hInfected:SetScale(tPlayerClass.first_infection.scale)
+    -- hInfected:SetArmor(tPlayerClass.first_infection.armor)
+    
+
 
     if bKeepPosition == false then return end
     hInfected:SetOrigin(vecOrigin)
