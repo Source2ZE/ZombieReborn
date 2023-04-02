@@ -58,7 +58,7 @@ function Infect_PickMotherZombies()
             local iSkipChance = tPlayerScope.MZSpawn_SkipChance or 0
             -- if MZSpawn_SkipChance is not initialized, then the if below is guaranteed to not pass
             -- Roll for player's chance to skip being picked as MZ
-            if math.random(1, 100) <= iSkipChance then
+            if RandomInt(1, 100) <= iSkipChance then
                 -- player succeeded the roll and avoided being picked as MZ,
                 -- reduce the value of his SkipChance script scope variable (just for good measure)
                 tPlayerScope.MZSpawn_SkipChance = tPlayerScope.MZSpawn_SkipChance - 20
@@ -92,7 +92,7 @@ end
 function Infect_OnRoundFreezeEnd()
     local iMZSpawntimeMinimum = Convars:GetInt("zr_infect_spawn_time_min")
     local iMZSpawntimeMaximum = Convars:GetInt("zr_infect_spawn_time_max")
-    local iMZSpawntime = math.random(iMZSpawntimeMinimum,iMZSpawntimeMaximum)
+    local iMZSpawntime = RandomInt(iMZSpawntimeMinimum,iMZSpawntimeMaximum)
 
     -- reduce mother zombie spawn skip chance for players who have that variable in their script scope
     for k,player in pairs(Entities:FindAllByClassname("player")) do
