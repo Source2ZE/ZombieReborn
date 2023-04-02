@@ -48,3 +48,23 @@ luac.out
 *.x86_64
 *.hex
 
+# All configs except what we ship
+cfg/*
+!cfg/server.cfg
+!cfg/listenserver.cfg
+!zr/*
+
+# Scripts besides what we ship
+scripts/vscripts/*
+!scripts/vscripts/ZombieReborn*
+
+# Game Files
+*.vpk
+*.vdf
+*.inf
+*.gi
+backup_round*
+maps/*
+panorama/*
+resource/*
+shadercache/*
