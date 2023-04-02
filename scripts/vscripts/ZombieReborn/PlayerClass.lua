@@ -24,7 +24,9 @@ for k, v in pairs(tPlayerClassConfig) do
         local basic_table = tBaseClassConfig[loadout]
         merge(basic_table, v)
         tPlayerClass[k] = basic_table
+    elseif v.base_class ~= nil then
+        print("base_class branch")
     else
-        print("loadout is null")
+        print("Load config failed: Unable to determine loadout or base_class.\n" .. debug.traceback())
     end
 end
