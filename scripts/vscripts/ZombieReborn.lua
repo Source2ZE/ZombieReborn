@@ -4,7 +4,7 @@ require "ZombieReborn.util.const"
 require "ZombieReborn.util.functions"
 require "ZombieReborn.util.timers"
 
-require "ZombieReborn.PlayerClasses"
+require "ZombieReborn.PlayerClass"
 require "ZombieReborn.Convars"
 require "ZombieReborn.Infect"
 require "ZombieReborn.Knockback"
