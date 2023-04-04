@@ -104,7 +104,7 @@ function OnPlayerDeath(event)
         if player:GetTeam() == CS_TEAM_CT then
             --ignore if the player on ct team is the current hVictim
             --since they have yet to switch team from Infect
-            if player ~= hVictim or not player:IsAlive() then
+            if player ~= hVictim and player:IsAlive() then
                 return
             end
         end
