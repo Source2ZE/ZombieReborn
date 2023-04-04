@@ -25,7 +25,11 @@ for k, v in pairs(tPlayerClassConfig) do
         merge(basic_table, v)
         tPlayerClass[k] = basic_table
     elseif v.base_class ~= nil then
-        print("base_class branch")
+        -- but... looks like no difference with loadout and base_class?
+        -- if so, then probably we should merge base_class and loadout?
+        local basic_table = tBaseClassConfig[v.base_class]
+        merge(basic_table, v)
+        tPlayerClass[k] = basic_table
     else
         print("Load config failed: Unable to determine loadout or base_class.\n" .. debug.traceback())
     end
