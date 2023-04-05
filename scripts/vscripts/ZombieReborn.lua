@@ -4,7 +4,9 @@ require "ZombieReborn.util.const"
 require "ZombieReborn.util.functions"
 require "ZombieReborn.util.timers"
 
-require "ZombieReborn.PlayerClass"
+--require "ZombieReborn.PlayerClass"
+require "ZombieReborn.PlayerClass2"
+
 require "ZombieReborn.Convars"
 require "ZombieReborn.Infect"
 require "ZombieReborn.Knockback"
@@ -34,9 +36,11 @@ function OnRoundStart(event)
         clientcmd = SpawnEntityFromTableSynchronous("point_clientcommand", {targetname="vscript_clientcommand"})
     end
 
-    print("Enabling spawn for T")
+    --print("Enabling spawn for T")
+
     Convars:SetInt("mp_respawn_on_death_t", 1)
     --Convars:SetInt('mp_ignore_round_win_conditions',1)
+
     ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
     
     SetAllHuman()
@@ -56,7 +60,8 @@ function SetAllHuman()
 
         if hController ~= nil then
             hController:GetPawn():SetTeam(CS_TEAM_CT)
-            SetPlayerClass(hController:GetPawn(), "human")
+            --SetPlayerClass(hController:GetPawn(), "human")
+            SetPlayerClass(hController:GetPawn(), human)
         end
     end
 
