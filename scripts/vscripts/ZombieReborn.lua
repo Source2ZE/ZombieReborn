@@ -116,7 +116,7 @@ function OnPlayerDeath(event)
         end
     end
 
-    print("Disabling spawn for T")
+    --print("Disabling spawn for T")
     --Side effect: the last player infected/died doesn't respawn until the next round start
     Convars:SetInt("mp_respawn_on_death_t", 0)
 end
