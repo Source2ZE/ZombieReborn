@@ -13,6 +13,12 @@ function Infect(hInflictor, hInfected, bKeepPosition)
     end
 
     hInfected:SetTeam(CS_TEAM_T)
+    if ZR_ZOMBIE_SPAWNED == false then
+        SetPlayerClass(hInfected, "mother_zombie")
+    else
+        SetPlayerClass(hInfected, "zombie")
+    end
+
     if bKeepPosition == false then return end
     hInfected:SetOrigin(vecOrigin)
     hInfected:SetAngles(vecAngles.x, vecAngles.y, vecAngles.z)
