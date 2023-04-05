@@ -4,8 +4,7 @@ require "ZombieReborn.util.const"
 require "ZombieReborn.util.functions"
 require "ZombieReborn.util.timers"
 
---require "ZombieReborn.PlayerClass"
-require "ZombieReborn.PlayerClass2"
+require "ZombieReborn.PlayerClass"
 
 require "ZombieReborn.Convars"
 require "ZombieReborn.Infect"
@@ -61,7 +60,7 @@ function SetAllHuman()
         if hController ~= nil then
             hController:GetPawn():SetTeam(CS_TEAM_CT)
             --SetPlayerClass(hController:GetPawn(), "human")
-            SetPlayerClass(hController:GetPawn(), human)
+            InjectPlayerClass(CPlayerHumanDefault, hController:GetPawn())
         end
     end
 

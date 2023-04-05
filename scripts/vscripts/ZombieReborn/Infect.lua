@@ -15,10 +15,10 @@ function Infect(hInflictor, hInfected, bKeepPosition)
     hInfected:SetTeam(CS_TEAM_T)
     if ZR_ZOMBIE_SPAWNED == false then
         --SetPlayerClass(hInfected, "mother_zombie")
-        SetPlayerClass(hInfected, mother_zombie)
+        InjectPlayerClass(CPlayerMotherZombie, hInfected)
     else
         --SetPlayerClass(hInfected, "zombie")
-        SetPlayerClass(hInfected, zombie)
+        InjectPlayerClass(CPlayerZombieDefault, hInfected)
     end
 
     if bKeepPosition == false then return end
