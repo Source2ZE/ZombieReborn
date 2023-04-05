@@ -41,6 +41,10 @@ function SetPlayerClass(hPlayer, sClassname)
         print("Player class not exist: " .. sClassname)
         return
     end
+    -- TBD: Probably we can set teams at here.
+    -- But this requires us to add more extra field to identify team.
+    -- Then, is this really necessary?
+
     -- SET PLAYER DATA
     hPlayer:SetHealth(tPlayer.health)
     hPlayer:SetMaxHealth(tPlayer.health)

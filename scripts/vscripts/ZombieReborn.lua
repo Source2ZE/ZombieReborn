@@ -54,6 +54,7 @@ function SetAllHuman()
 
         if hController ~= nil then
             hController:GetPawn():SetTeam(CS_TEAM_CT)
+            SetPlayerClass(hController:GetPawn(), "human")
         end
     end
 
