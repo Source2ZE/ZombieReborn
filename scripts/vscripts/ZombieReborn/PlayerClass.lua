@@ -1,16 +1,19 @@
 --[[
-    Available class:
-        human:
-        CPlayerHumanDefault
-        CPlayerAdmin(example)
+    Class:
+        ZRClass.Human:
+            Default
 
-        zombie:
-        CPlayerZombieDefault
-        CPlayerMotherZombie
+        ZRClass.Zombie:
+            Default
+            MotherZombie
 
         InjectPlayerClass(class, player) to change class
 --]]
 
+ZRClass = {
+    Human = {},
+    Zombie = {}
+}
 
 function GenerateMetaTableConfig(tClass, parent)
     local mt = {
@@ -19,7 +22,7 @@ function GenerateMetaTableConfig(tClass, parent)
     --metatable for the player, allowing them to use function of this class
     tClass.mt = mt;
 
-    --metatable for the class, allowing this class to extends CBasePlayerPawn
+    --metatable for the class, allowing this class to extends parent
     mt = {
         __index = parent
     }
@@ -35,22 +38,25 @@ function InjectPlayerClass(tClass, player)
     player:OnInjection()
 end
 
-function AddHumanClass(tClass)
-    GenerateMetaTableConfig(tClass, CPlayerHumanDefault);
+function AddHumanClass(tClass, name)
+    GenerateMetaTableConfig(tClass, ZRClass.Human.Default);
+    ZRClass.Human[name] = tClass;
 end
 
-function AddZombieClass(tClass)
-    GenerateMetaTableConfig(tClass, CPlayerZombieDefault);
+function AddZombieClass(tClass, name)
+    GenerateMetaTableConfig(tClass, ZRClass.Zombie.Default);
+    ZRClass.Zombie[name] = tClass;
 end
 
-tPlayerClassConfig = LoadKeyValues("cfg/zr/playerclass.cfg")
-if tPlayerClassConfig == nil then print("TABLE NOT EXIST") end
-
+local tPlayerClassConfig = LoadKeyValues("cfg/zr/playerclass.cfg")
 --Player will use these stats if certain stats doesn't exist in their class
-CPlayerHumanDefault = tPlayerClassConfig.human_default
+local CPlayerHumanDefault = tPlayerClassConfig.Human.Default
 GenerateMetaTableConfig(CPlayerHumanDefault, CBasePlayerPawn)
-CPlayerZombieDefault = tPlayerClassConfig.zombie_default
+local CPlayerZombieDefault = tPlayerClassConfig.Zombie.Default
 GenerateMetaTableConfig(CPlayerZombieDefault, CBasePlayerPawn)
+
+ZRClass.Human.Default = CPlayerHumanDefault
+ZRClass.Zombie.Default = CPlayerZombieDefault
 
 --Do something when this class is injected onto the player
 function CPlayerHumanDefault:OnInjection()
@@ -94,16 +100,30 @@ function CPlayerZombieDefault:Release()
     self:SetContextThink("Regen", nil, 0)
 end
 
---Adding news classes that overrides the default value/extends its functionality
-CPlayerMotherZombie = tPlayerClassConfig.mother_zombie
-AddZombieClass(CPlayerMotherZombie)
+--Generating other classes from playerclass.cfg that overrides the default value/extends its functionality
+
+for k, v in pairs(tPlayerClassConfig.Human) do
+    if k ~= "Default" then
+        AddHumanClass(v, k);
+    end
+end
+for k, v in pairs(tPlayerClassConfig.Zombie) do
+    if k ~= "Default" then
+        AddZombieClass(v, k);
+    end
+end
+--print("Human Class: ")
+--table.dump(ZRClass.Human)
+--print("Zombie Class: ")
+--table.dump(ZRClass.Zombie)
 
 
+--For Mappers/Server Operator that want more for their class
 --ent_fire !self runscriptcode "InjectPlayerClass(CPlayerAdmin, thisEntity)"
 --shoot or ent_fire !self runscriptcode "thisEntity:LaunchGrenade()"
 --ent_fire !self runscriptcode "InjectPlayerClass(CPlayerHumanDefault, thisEntity)" to restore
---More examples
-CPlayerAdmin = {
+--[[
+local CPlayerAdmin = {
     health = 9999999,
     speed = 1,
     scale = 5,
@@ -112,7 +132,7 @@ CPlayerAdmin = {
 	colorG = 0,
 	colorB = 0
 }
-AddHumanClass(CPlayerAdmin)
+AddHumanClass(CPlayerAdmin, Admin)
 function CPlayerAdmin:LaunchGrenade()
     local hEnt = SpawnEntityFromTableSynchronous("hegrenade_projectile", {
         origin = self:EyePosition(),
@@ -129,5 +149,6 @@ local OnWeaponFired = function(event)
     end
 end
 CPlayerAdmin.weapon_fire = ListenToGameEvent("weapon_fire", OnWeaponFired, nil)
+--]]
 
 --Doesn't support extending custom class on top of each other right now/
