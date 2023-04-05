@@ -25,7 +25,6 @@ end
 
 -- round start logic
 function OnRoundStart(event)
-    ZR_ZOMBIE_SPAWNED = false
 
     -- Make sure point_clientcommand exists
     clientcmd = Entities:FindByClassname(nil, "point_clientcommand")
@@ -139,7 +138,10 @@ function OnItemEquip(event)
             end
         end
     end
+end
 
+function OnRoundEnd(event)
+    ZR_ZOMBIE_SPAWNED = false
 end
 
 tListenerIds = {
@@ -150,5 +152,6 @@ tListenerIds = {
     ListenToGameEvent("hegrenade_detonate", Knockback_OnGrenadeDetonate, nil),
     ListenToGameEvent("molotov_detonate", Knockback_OnMolotovDetonate, nil),
     ListenToGameEvent("round_freeze_end", Infect_OnRoundFreezeEnd, nil),
-    ListenToGameEvent("item_equip", OnItemEquip, nil)
+    ListenToGameEvent("item_equip", OnItemEquip, nil),
+    ListenToGameEvent("round_end", OnRoundEnd, nil)
 }
