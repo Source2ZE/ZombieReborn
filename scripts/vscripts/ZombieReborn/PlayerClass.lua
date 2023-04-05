@@ -34,3 +34,18 @@ for k, v in pairs(tPlayerClassConfig) do
         print("Load config failed: Unable to determine loadout or base_class.\n" .. debug.traceback())
     end
 end
+
+function SetPlayerClass(hPlayer, sClassname)
+    local tPlayer = tPlayerClass[sClassname]
+    if tPlayer == nil then 
+        print("Player class not exist: " .. sClassname)
+        return
+    end
+    -- SET PLAYER DATA
+    hPlayer:SetHealth(tPlayer.health)
+    hPlayer:SetMaxHealth(tPlayer.health)
+    hPlayer:SetGravity(tPlayer.gravity)
+    -- hPlayer:SetModel(tPlayer.model)
+    -- hInfected:SetScale(tPlayerClass.scale)
+    -- hInfected:SetArmor(tPlayerClass.armor)
+end

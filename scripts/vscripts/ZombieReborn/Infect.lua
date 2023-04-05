@@ -14,17 +14,9 @@ function Infect(hInflictor, hInfected, bKeepPosition)
 
     hInfected:SetTeam(CS_TEAM_T)
     if ZR_ZOMBIE_SPAWNED == false then
-        -- just here for test first infection whether works properly...
-        hInfected:SetHealth(tPlayerClass.first_infection.health)
-        hInfected:SetMaxHealth(tPlayerClass.first_infection.health)
-        hInfected:SetGravity(tPlayerClass.first_infection.gravity)
-        -- hInfected:SetModel(tPlayerClass.first_infection.model)
-        -- hInfected:SetScale(tPlayerClass.first_infection.scale)
-        -- hInfected:SetArmor(tPlayerClass.first_infection.armor)
+        SetPlayerClass(hInfected, "first_infection")
     else
-        hInfected:SetHealth(tPlayerClass.zombie.health)
-        hInfected:SetMaxHealth(tPlayerClass.zombie.health)
-        hInfected:SetGravity(tPlayerClass.zombie.gravity)
+        SetPlayerClass(hInfected, "zombie")
     end
 
     if bKeepPosition == false then return end
