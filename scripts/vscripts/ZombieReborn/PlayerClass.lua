@@ -64,12 +64,12 @@ function CPlayerHumanDefault:OnInjection()
     --accessing value indirectly through the player handle would also work
     --such as self.health. But this value might be overriden by mapper who would
     --like to set value directly on the player handle as well
-    local model = thisClass.model[tostring(RandomInt(1,thisClass.model_count))]
+    local model = thisClass.model[tostring(RandomInt(1,table.size(thisClass.model)))]
     self:SetModel(model)
     self:SetHealth(thisClass.health)
     self:SetMaxHealth(thisClass.health)
     self:SetAbsScale(thisClass.scale)
-    self:SetRenderColor(thisClass.colorR, thisClass.colorG, thisClass.colorB)
+    self:SetRenderColor(thisClass.color.r, thisClass.color.g, thisClass.color.b)
 end
 function CPlayerHumanDefault:IsClass(tClass)
     return self.zrclass == tClass
@@ -78,12 +78,12 @@ end
 --Do something when this class is injected onto the player
 function CPlayerZombieDefault:OnInjection()
     local thisClass = self.zrclass
-    local model = thisClass.model[tostring(RandomInt(1,thisClass.model_count))]
+    local model = thisClass.model[tostring(RandomInt(1,table.size(thisClass.model)))]
     self:SetModel(model)
     self:SetHealth(thisClass.health)
     self:SetMaxHealth(thisClass.health)
     self:SetAbsScale(thisClass.scale)
-    self:SetRenderColor(thisClass.colorR, thisClass.colorG, thisClass.colorB)
+    self:SetRenderColor(thisClass.color.r, thisClass.color.g, thisClass.color.b)
     --Start Regenerating health
     self:SetContextThink("Regen", self.Regen, 0)
 end
@@ -128,9 +128,9 @@ local CPlayerAdmin = {
     speed = 1,
     scale = 5,
     gravity = 0,
-    colorR = 0,
-	colorG = 0,
-	colorB = 0
+    color = {
+        r = 0, g = 0, b = 0
+    }
 }
 AddHumanClass(CPlayerAdmin, "Admin")
 function CPlayerAdmin:LaunchGrenade()

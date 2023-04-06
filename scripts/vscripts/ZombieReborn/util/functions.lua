@@ -22,6 +22,14 @@ function table.shuffle(tbl)
     return tbl
 end
 
+function table.size(tbl)
+    local getN = 0
+    for _ in pairs(tbl) do 
+        getN = getN + 1 
+    end
+    return getN
+end
+
 -- removes all instances of a given value
 -- from a given table
 function table.RemoveValue(tbl, value)
