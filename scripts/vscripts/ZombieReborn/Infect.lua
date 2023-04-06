@@ -48,14 +48,13 @@ function Infect_PickMotherZombies()
     -- If the player is skipped, next random player is picked to be mother zombie (and same skip chance logic applies to him)
     -- the variable gets decreased by 20 every round (if it exists inside player's scope)
     local function PickMotherZombies()
-        
         -- No players to choose from
         if tPlayerTable == nil or #tPlayerTable == 0 then
             iMotherZombieCount = #tMotherZombies
             return
         end
         
-        local tPlayerTableShuffled = table.shuffle(tPlayerTable)
+        local tPlayerTableShuffled = table.shuffle(vlua.clone(tPlayerTable))
 
         for idx = 1, #tPlayerTableShuffled do
             local hPlayer = tPlayerTableShuffled[idx]
@@ -64,7 +63,7 @@ function Infect_PickMotherZombies()
             local iSkipChance = tPlayerScope.MZSpawn_SkipChance or 0
             -- if MZSpawn_SkipChance is not initialized, then the if below is guaranteed to not pass
             -- Roll for player's chance to skip being picked as MZ
-            if math.random(1, 100) <= iSkipChance then
+            if RandomInt(1, 100) <= iSkipChance then
                 -- player succeeded the roll and avoided being picked as MZ,
                 -- reduce the value of his SkipChance script scope variable (just for good measure)
                 tPlayerScope.MZSpawn_SkipChance = tPlayerScope.MZSpawn_SkipChance - 20
@@ -98,7 +97,7 @@ end
 function Infect_OnRoundFreezeEnd()
     local iMZSpawntimeMinimum = Convars:GetInt("zr_infect_spawn_time_min")
     local iMZSpawntimeMaximum = Convars:GetInt("zr_infect_spawn_time_max")
-    local iMZSpawntime = math.random(iMZSpawntimeMinimum,iMZSpawntimeMaximum)
+    local iMZSpawntime = RandomInt(iMZSpawntimeMinimum,iMZSpawntimeMaximum)
 
     -- reduce mother zombie spawn skip chance for players who have that variable in their script scope
     for k,player in pairs(Entities:FindAllByClassname("player")) do

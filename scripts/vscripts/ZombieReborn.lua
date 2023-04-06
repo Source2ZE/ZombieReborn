@@ -26,7 +26,6 @@ end
 
 -- round start logic
 function OnRoundStart(event)
-    ZR_ZOMBIE_SPAWNED = false
 
     -- Make sure point_clientcommand exists
     clientcmd = Entities:FindByClassname(nil, "point_clientcommand")
@@ -35,13 +34,18 @@ function OnRoundStart(event)
         clientcmd = SpawnEntityFromTableSynchronous("point_clientcommand", {targetname="vscript_clientcommand"})
     end
 
-    Convars:SetInt("mp_respawn_on_death_t",1)
-    Convars:SetInt('mp_ignore_round_win_conditions',1)
+    --print("Enabling spawn for T")
+
+    Convars:SetInt("mp_respawn_on_death_t", 1)
+    --Convars:SetInt('mp_ignore_round_win_conditions',1)
+
     ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
     
     SetAllHuman()
     SetupRepeatKiller()
     SetupAmmoReplenish()
+    
+    Timers:RemoveTimer("MZSelection_Timer")
     
     ZR_ROUND_STARTED = true
 end
@@ -83,14 +87,35 @@ function OnPlayerDeath(event)
 
     --Prevent Infecting the player in the same tick as the player dying
     if hAttacker:GetTeam() == CS_TEAM_T and hVictim:GetTeam() == CS_TEAM_CT then
-        DoEntFireByInstanceHandle(hVictim, "runscriptcode", "Infect(nil, thisEntity, true)", 0, nil, nil)
+        DoEntFireByInstanceHandle(hVictim, "runscriptcode", "Infect(nil, thisEntity, true)", 0.01, nil, nil)
     end
 
     -- Infect Humans that died after first infection has started
     if ZR_ROUND_STARTED and ZR_ZOMBIE_SPAWNED and hVictim:GetTeam() == CS_TEAM_CT then
         --Prevent Infecting the player in the same tick as the player dying
-        DoEntFireByInstanceHandle(hVictim, "runscriptcode", "Infect(nil, thisEntity, false)", 0.1, nil, nil)
+        DoEntFireByInstanceHandle(hVictim, "runscriptcode", "Infect(nil, thisEntity, false)", 0.01, nil, nil)
     end
+
+    --Allow the round to end if there's no CT left
+    --ignore if zombie has yet to spawn
+    if not ZR_ZOMBIE_SPAWNED then
+        return
+    end
+
+    local tPlayerTable = Entities:FindAllByClassname("player")
+    for _, player in ipairs(tPlayerTable) do
+        if player:GetTeam() == CS_TEAM_CT then
+            --ignore if the player on ct team is the current hVictim
+            --since they have yet to switch team from Infect
+            if player ~= hVictim and player:IsAlive() then
+                return
+            end
+        end
+    end
+
+    --print("Disabling spawn for T")
+    --Side effect: the last player infected/died doesn't respawn until the next round start
+    Convars:SetInt("mp_respawn_on_death_t", 0)
 end
 
 -- Infect late spawners
@@ -117,7 +142,10 @@ function OnItemEquip(event)
             end
         end
     end
+end
 
+function OnRoundEnd(event)
+    ZR_ZOMBIE_SPAWNED = false
 end
 
 tListenerIds = {
@@ -128,5 +156,6 @@ tListenerIds = {
     ListenToGameEvent("hegrenade_detonate", Knockback_OnGrenadeDetonate, nil),
     ListenToGameEvent("molotov_detonate", Knockback_OnMolotovDetonate, nil),
     ListenToGameEvent("round_freeze_end", Infect_OnRoundFreezeEnd, nil),
-    ListenToGameEvent("item_equip", OnItemEquip, nil)
+    ListenToGameEvent("item_equip", OnItemEquip, nil),
+    ListenToGameEvent("round_end", OnRoundEnd, nil)
 }
