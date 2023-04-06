@@ -10,6 +10,10 @@ Copy both the `scripts` and `cfg` directories to your `game/csgo` folder. If you
 
 Knockback will not function out of the box, as Movement Unlocker is required similar to CS:GO. See instructions on manually patching Movement Unlocker [here](../../wiki/Patching-Movement-Unlocker) until there is some plugin API available to do it in.
 
+## Documentation
+
+You can find the documentation of various Zombie:Reborn features [here](../../wiki/Documentation).
+
 ## Current issues
 You can find the current issues with CS2 we'd like to report to Valve [here](../../wiki/CS2-Issues).
 
