@@ -5,7 +5,16 @@ if tBaseClassConfig == nil or tPlayerClassConfig == nil then print("TABLE NOT EX
 
 tPlayerClass = {}
 
-table.insert(tPlayerClass, tBaseClassConfig)
+for key, value in pairs(tBaseClassConfig) do
+    tPlayerClass[key] = value
+end
+
+-- WTF
+-- Lua changed my table's index, why
+-- stupid behaviour
+-- table.insert(tPlayerClass, tBaseClassConfig)
+
+Convars:RegisterCommand("zr_dump_class", function() DeepPrint(tPlayerClass) end, "", 0)
 
 function merge(t1, t2)
     for k, v in pairs(t2) do
