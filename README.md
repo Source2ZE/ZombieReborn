@@ -12,7 +12,7 @@ Knockback will not function out of the box, as Movement Unlocker is required sim
 
 ## Documentation
 
-You can find the documentation of various Zombie:Reborn features [here](../../wiki/Documentation)
+You can find the documentation of various Zombie:Reborn features [here](../../wiki/Documentation).
 
 ## Current issues
 You can find the current issues with CS2 we'd like to report to Valve [here](../../wiki/CS2-Issues).
