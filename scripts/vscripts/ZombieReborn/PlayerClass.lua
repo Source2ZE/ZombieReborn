@@ -132,7 +132,7 @@ local CPlayerAdmin = {
 	colorG = 0,
 	colorB = 0
 }
-AddHumanClass(CPlayerAdmin, Admin)
+AddHumanClass(CPlayerAdmin, "Admin")
 function CPlayerAdmin:LaunchGrenade()
     local hEnt = SpawnEntityFromTableSynchronous("hegrenade_projectile", {
         origin = self:EyePosition(),
