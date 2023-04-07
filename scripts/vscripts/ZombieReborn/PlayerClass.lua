@@ -12,25 +12,25 @@
 
 ZRClass = {
     Human = {},
-    Zombie = {}
+    Zombie = {},
 }
 
 function GenerateMetaTableConfig(tClass, parent)
     local mt = {
-        __index = tClass
+        __index = tClass,
     }
     --metatable for the player, allowing them to use function of this class
-    tClass.mt = mt;
+    tClass.mt = mt
 
     --metatable for the class, allowing this class to extends parent
     mt = {
-        __index = parent
+        __index = parent,
     }
     setmetatable(tClass, mt)
 end
 
 function InjectPlayerClass(tClass, player)
-    if player.Release then 
+    if player.Release then
         player:Release()
     end
     setmetatable(player, tClass.mt)
@@ -39,13 +39,13 @@ function InjectPlayerClass(tClass, player)
 end
 
 function AddHumanClass(tClass, name)
-    GenerateMetaTableConfig(tClass, ZRClass.Human.Default);
-    ZRClass.Human[name] = tClass;
+    GenerateMetaTableConfig(tClass, ZRClass.Human.Default)
+    ZRClass.Human[name] = tClass
 end
 
 function AddZombieClass(tClass, name)
-    GenerateMetaTableConfig(tClass, ZRClass.Zombie.Default);
-    ZRClass.Zombie[name] = tClass;
+    GenerateMetaTableConfig(tClass, ZRClass.Zombie.Default)
+    ZRClass.Zombie[name] = tClass
 end
 
 local tPlayerClassConfig = LoadKeyValues("cfg/zr/playerclass.cfg")
@@ -64,7 +64,7 @@ function CPlayerHumanDefault:OnInjection()
     --accessing value indirectly through the player handle would also work
     --such as self.health. But this value might be overriden by mapper who would
     --like to set value directly on the player handle as well
-    local model = thisClass.model[tostring(RandomInt(1,table.size(thisClass.model)))]
+    local model = thisClass.model[tostring(RandomInt(1, table.size(thisClass.model)))]
     self:SetModel(model)
     self:SetHealth(thisClass.health)
     self:SetMaxHealth(thisClass.health)
@@ -78,7 +78,7 @@ end
 --Do something when this class is injected onto the player
 function CPlayerZombieDefault:OnInjection()
     local thisClass = self.zrclass
-    local model = thisClass.model[tostring(RandomInt(1,table.size(thisClass.model)))]
+    local model = thisClass.model[tostring(RandomInt(1, table.size(thisClass.model)))]
     self:SetModel(model)
     self:SetHealth(thisClass.health)
     self:SetMaxHealth(thisClass.health)
@@ -104,19 +104,18 @@ end
 
 for k, v in pairs(tPlayerClassConfig.Human) do
     if k ~= "Default" then
-        AddHumanClass(v, k);
+        AddHumanClass(v, k)
     end
 end
 for k, v in pairs(tPlayerClassConfig.Zombie) do
     if k ~= "Default" then
-        AddZombieClass(v, k);
+        AddZombieClass(v, k)
     end
 end
 --print("Human Class: ")
 --table.dump(ZRClass.Human)
 --print("Zombie Class: ")
 --table.dump(ZRClass.Zombie)
-
 
 --For Mappers/Server Operator that want more for their class
 --ent_fire !self runscriptcode "InjectPlayerClass(CPlayerAdmin, thisEntity)"
