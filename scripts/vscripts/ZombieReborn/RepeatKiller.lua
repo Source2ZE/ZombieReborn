@@ -23,5 +23,5 @@ function ToggleRepeatKiller()
         ScriptPrintMessageChatAll(" \x04[Zombie:Reborn]\x01 Respawning enabled!")
     end
 
-    bRepeatKillerToggle =  not bRepeatKillerToggle
+    bRepeatKillerToggle = not bRepeatKillerToggle
 end

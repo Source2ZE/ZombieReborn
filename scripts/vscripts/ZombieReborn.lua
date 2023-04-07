@@ -1,22 +1,22 @@
 print("Starting ZombieReborn!")
 
-require "ZombieReborn.util.const"
-require "ZombieReborn.util.functions"
-require "ZombieReborn.util.timers"
+require("ZombieReborn.util.const")
+require("ZombieReborn.util.functions")
+require("ZombieReborn.util.timers")
 
-require "ZombieReborn.PlayerClass"
+require("ZombieReborn.PlayerClass")
 
-require "ZombieReborn.Convars"
-require "ZombieReborn.Infect"
-require "ZombieReborn.Knockback"
-require "ZombieReborn.RepeatKiller"
-require "ZombieReborn.AmmoReplenish"
+require("ZombieReborn.Convars")
+require("ZombieReborn.Infect")
+require("ZombieReborn.Knockback")
+require("ZombieReborn.RepeatKiller")
+require("ZombieReborn.AmmoReplenish")
 
 ZR_ROUND_STARTED = false
 ZR_ZOMBIE_SPAWNED = false -- Check if first zombie spawned
 
-Convars:SetInt("mp_autoteambalance",0)
-Convars:SetInt("mp_limitteams",0)
+Convars:SetInt("mp_autoteambalance", 0)
+Convars:SetInt("mp_limitteams", 0)
 
 --remove duplicated listeners upon manual reload
 if tListenerIds then
@@ -27,12 +27,11 @@ end
 
 -- round start logic
 function OnRoundStart(event)
-
     -- Make sure point_clientcommand exists
     clientcmd = Entities:FindByClassname(nil, "point_clientcommand")
-	
+
     if clientcmd == nil then
-        clientcmd = SpawnEntityFromTableSynchronous("point_clientcommand", {targetname="vscript_clientcommand"})
+        clientcmd = SpawnEntityFromTableSynchronous("point_clientcommand", { targetname = "vscript_clientcommand" })
     end
 
     --print("Enabling spawn for T")
@@ -41,13 +40,13 @@ function OnRoundStart(event)
     --Convars:SetInt('mp_ignore_round_win_conditions',1)
 
     ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
-    
+
     SetAllHuman()
     SetupRepeatKiller()
     SetupAmmoReplenish()
-    
+
     Timers:RemoveTimer("MZSelection_Timer")
-    
+
     ZR_ROUND_STARTED = true
 end
 
@@ -69,7 +68,9 @@ end
 
 function OnPlayerHurt(event)
     --__DumpScope(0, event)
-    if event.weapon == "" or event.attacker_pawn == nil then return end
+    if event.weapon == "" or event.attacker_pawn == nil then
+        return
+    end
     local hAttacker = EHandleToHScript(event.attacker_pawn)
     local hVictim = EHandleToHScript(event.userid_pawn)
 
@@ -83,7 +84,9 @@ end
 -- player_death doesn't have dmg_health, so it has a separate callback
 function OnPlayerDeath(event)
     --__DumpScope(0, event)
-    if event.weapon == "" or event.attacker_pawn == -1 then return end
+    if event.weapon == "" or event.attacker_pawn == -1 then
+        return
+    end
     local hAttacker = EHandleToHScript(event.attacker_pawn)
     local hVictim = EHandleToHScript(event.userid_pawn)
 
@@ -159,5 +162,5 @@ tListenerIds = {
     ListenToGameEvent("molotov_detonate", Knockback_OnMolotovDetonate, nil),
     ListenToGameEvent("round_freeze_end", Infect_OnRoundFreezeEnd, nil),
     ListenToGameEvent("item_equip", OnItemEquip, nil),
-    ListenToGameEvent("round_end", OnRoundEnd, nil)
+    ListenToGameEvent("round_end", OnRoundEnd, nil),
 }

@@ -24,8 +24,8 @@ end
 
 function table.size(tbl)
     local getN = 0
-    for _ in pairs(tbl) do 
-        getN = getN + 1 
+    for _ in pairs(tbl) do
+        getN = getN + 1
     end
     return getN
 end
