@@ -59,7 +59,7 @@ function SetAllHuman()
         if hController ~= nil then
             hController:GetPawn():SetTeam(CS_TEAM_CT)
             --SetPlayerClass(hController:GetPawn(), "human")
-            InjectPlayerClass(ZRClass.Human.Default, hController:GetPawn())
+            InjectPlayerClass(ZRClass.Human[Convars:GetStr("zr_human_class")], hController:GetPawn())
         end
     end
 
