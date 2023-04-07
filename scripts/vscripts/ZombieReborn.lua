@@ -10,7 +10,7 @@ require("ZombieReborn.Convars")
 require("ZombieReborn.Infect")
 require("ZombieReborn.Knockback")
 require("ZombieReborn.RepeatKiller")
-require("ZombieReborn.AmmoReplenish")
+require "ZombieReborn.AmmoReplenish"
 
 ZR_ROUND_STARTED = false
 ZR_ZOMBIE_SPAWNED = false -- Check if first zombie spawned
