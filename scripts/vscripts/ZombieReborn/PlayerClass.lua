@@ -8,6 +8,7 @@
             MotherZombie
 
         InjectPlayerClass(class, player) to change class
+		Use Built-in hPlayer:IsInstance(class) to check class
 --]]
 
 ZRClass = {
@@ -71,9 +72,6 @@ function CPlayerHumanDefault:OnInjection()
     self:SetAbsScale(thisClass.scale)
     self:SetRenderColor(thisClass.color.r, thisClass.color.g, thisClass.color.b)
 end
-function CPlayerHumanDefault:IsClass(tClass)
-    return self.zrclass == tClass
-end
 
 --Do something when this class is injected onto the player
 function CPlayerZombieDefault:OnInjection()
@@ -87,9 +85,7 @@ function CPlayerZombieDefault:OnInjection()
     --Start Regenerating health
     self:SetContextThink("Regen", self.Regen, 0)
 end
-function CPlayerZombieDefault:IsClass(tClass)
-    return self.zrclass == tClass
-end
+
 function CPlayerZombieDefault:Regen()
     self:SetHealth(Clamp(self:GetHealth() + self.zrclass.health_regen_count, 0, self.health))
     return self.zrclass.health_regen_interval
@@ -142,8 +138,7 @@ end
 
 local OnWeaponFired = function(event)
     local hPlayer = EHandleToHScript(event.userid_pawn)
-    --print(hPlayer:IsClass(CPlayerAdmin))
-    if hPlayer:IsClass(CPlayerAdmin) then 
+    if hPlayer:IsInstance(CPlayerAdmin) then 
         hPlayer:LaunchGrenade()
     end
 end
