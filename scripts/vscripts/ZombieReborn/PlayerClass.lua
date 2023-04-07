@@ -115,9 +115,9 @@ end
 
 
 --For Mappers/Server Operator that want more for their class
---ent_fire !self runscriptcode "InjectPlayerClass(CPlayerAdmin, thisEntity)"
+--ent_fire !self runscriptcode "InjectPlayerClass(ZRClass.Human.Admin, thisEntity)"
 --shoot or ent_fire !self runscriptcode "thisEntity:LaunchGrenade()"
---ent_fire !self runscriptcode "InjectPlayerClass(CPlayerHumanDefault, thisEntity)" to restore
+--ent_fire !self runscriptcode "InjectPlayerClass(ZRClass.Human.Default, thisEntity)" to restore
 --[[
 local CPlayerAdmin = {
     health = 9999999,
