@@ -44,7 +44,7 @@ function InjectPlayerClass(tClass, player)
 end
 
 function AddHumanClass(tClass, name)
-    GenerateMetaTableConfig(tClass, ZRClass.Human.Default)
+    GenerateMetaTableConfig(tClass, ZRClass.Human.Base)
     ZRClass.Human[name] = tClass
     if tClass.team_default == 1 then
         table.insert(ZRClass.Default.Human, tClass)
@@ -52,7 +52,7 @@ function AddHumanClass(tClass, name)
 end
 
 function AddZombieClass(tClass, name)
-    GenerateMetaTableConfig(tClass, ZRClass.Zombie.Default)
+    GenerateMetaTableConfig(tClass, ZRClass.Zombie.Base)
     ZRClass.Zombie[name] = tClass
     if tClass.team_default == 1 then
         table.insert(ZRClass.Default.Zombie, tClass)
@@ -69,22 +69,22 @@ end
 
 local tPlayerClassConfig = LoadKeyValues("cfg/zr/playerclass.cfg")
 --Player will use these stats if certain stats doesn't exist in their class
-local CPlayerHumanDefault = tPlayerClassConfig.Human.Default
-GenerateMetaTableConfig(CPlayerHumanDefault, CBasePlayerPawn)
-local CPlayerZombieDefault = tPlayerClassConfig.Zombie.Default
-GenerateMetaTableConfig(CPlayerZombieDefault, CBasePlayerPawn)
+local CPlayerHumanBase = tPlayerClassConfig.Human.Base
+GenerateMetaTableConfig(CPlayerHumanBase, CBasePlayerPawn)
+local CPlayerZombieBase = tPlayerClassConfig.Zombie.Base
+GenerateMetaTableConfig(CPlayerZombieBase, CBasePlayerPawn)
 
-ZRClass.Human.Default = CPlayerHumanDefault
-if CPlayerHumanDefault.team_default == 1 then
-    table.insert(ZRClass.Default.Human, CPlayerHumanDefault)
+ZRClass.Human.Base = CPlayerHumanBase
+if CPlayerHumanBase.team_default == 1 then
+    table.insert(ZRClass.Default.Human, CPlayerHumanBase)
 end
-ZRClass.Zombie.Default = CPlayerZombieDefault
-if CPlayerZombieDefault.team_default == 1 then
-    table.insert(ZRClass.Default.Zombie, CPlayerZombieDefault)
+ZRClass.Zombie.Base = CPlayerZombieBase
+if CPlayerZombieBase.team_default == 1 then
+    table.insert(ZRClass.Default.Zombie, CPlayerZombieBase)
 end
 
 --Do something when this class is injected onto the player
-function CPlayerHumanDefault:OnInjection()
+function CPlayerHumanBase:OnInjection()
     local thisClass = self.zrclass
     --accessing value indirectly through the player handle would also work
     --such as self.health. But this value might be overriden by mapper who would
@@ -98,7 +98,7 @@ function CPlayerHumanDefault:OnInjection()
 end
 
 --Do something when this class is injected onto the player
-function CPlayerZombieDefault:OnInjection()
+function CPlayerZombieBase:OnInjection()
     local thisClass = self.zrclass
     local model = thisClass.model[tostring(RandomInt(1, table.size(thisClass.model)))]
     self:SetModel(model)
@@ -110,12 +110,12 @@ function CPlayerZombieDefault:OnInjection()
     self:SetContextThink("Regen", self.Regen, 0)
 end
 
-function CPlayerZombieDefault:Regen()
+function CPlayerZombieBase:Regen()
     self:SetHealth(Clamp(self:GetHealth() + self.zrclass.health_regen_count, 0, self.health))
     return self.zrclass.health_regen_interval
 end
 --Optional: Do some clean up when player is freed from this class
-function CPlayerZombieDefault:Release()
+function CPlayerZombieBase:Release()
     --Remove Regen
     self:SetContextThink("Regen", nil, 0)
 end
@@ -123,12 +123,12 @@ end
 --Generating other classes from playerclass.cfg that overrides the default value/extends its functionality
 
 for k, v in pairs(tPlayerClassConfig.Human) do
-    if k ~= "Default" and v.enabled then
+    if k ~= "Base" and v.enabled then
         AddHumanClass(v, k)
     end
 end
 for k, v in pairs(tPlayerClassConfig.Zombie) do
-    if k ~= "Default" and v.enabled then
+    if k ~= "Base" and v.enabled then
         AddZombieClass(v, k)
     end
 end
@@ -141,7 +141,7 @@ end
 --For Mappers/Server Operator that want more for their class
 --ent_fire !self runscriptcode "InjectPlayerClass(ZRClass.Human.Admin, thisEntity)"
 --shoot or ent_fire !self runscriptcode "thisEntity:LaunchGrenade()"
---ent_fire !self runscriptcode "InjectPlayerClass(ZRClass.Human.Default, thisEntity)" to restore
+--ent_fire !self runscriptcode "InjectPlayerClass(ZRClass.Human.Base, thisEntity)" to restore
 --[[
 local CPlayerAdmin = {
     health = 9999999,
