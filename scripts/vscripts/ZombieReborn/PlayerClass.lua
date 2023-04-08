@@ -44,19 +44,19 @@ function InjectPlayerClass(tClass, player)
 end
 
 function AddHumanClass(tClass, name)
-    GenerateMetaTableConfig(tClass, ZRClass.Human.Base)
     ZRClass.Human[name] = tClass
     if tClass.team_default == 1 then
         table.insert(ZRClass.Default.Human, tClass)
     end
+    GenerateMetaTableConfig(tClass, ZRClass.Human.Base)
 end
 
 function AddZombieClass(tClass, name)
-    GenerateMetaTableConfig(tClass, ZRClass.Zombie.Base)
     ZRClass.Zombie[name] = tClass
     if tClass.team_default == 1 then
         table.insert(ZRClass.Default.Zombie, tClass)
     end
+    GenerateMetaTableConfig(tClass, ZRClass.Zombie.Base)
 end
 
 function PickRandomHumanDefaultClass()
