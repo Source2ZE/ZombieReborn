@@ -4,13 +4,12 @@ require("ZombieReborn.util.const")
 require("ZombieReborn.util.functions")
 require("ZombieReborn.util.timers")
 
-require("ZombieReborn.PlayerClass")
-
 require("ZombieReborn.Convars")
 require("ZombieReborn.Infect")
 require("ZombieReborn.Knockback")
 require("ZombieReborn.RepeatKiller")
 require("ZombieReborn.AmmoReplenish")
+require("ZombieReborn.PlayerClass")
 
 ZR_ROUND_STARTED = false
 ZR_ZOMBIE_SPAWNED = false -- Check if first zombie spawned
@@ -59,7 +58,7 @@ function SetAllHuman()
         if hController ~= nil then
             hController:GetPawn():SetTeam(CS_TEAM_CT)
             --SetPlayerClass(hController:GetPawn(), "human")
-            InjectPlayerClass(ZRClass.Human.Default, hController:GetPawn())
+            InjectPlayerClass(PickRandomHumanDefaultClass(), hController:GetPawn())
         end
     end
 
