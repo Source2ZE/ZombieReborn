@@ -14,7 +14,7 @@ function Infect(hInflictor, hInfected, bKeepPosition)
 
     hInfected:SetTeam(CS_TEAM_T)
     if ZR_ZOMBIE_SPAWNED == false then
-        InjectPlayerClass(ZRClass.Zombie[Convars:GetStr("zr_mother_zombie_class")], hInfected)
+        InjectPlayerClass(ZRClass.Zombie.MotherZombie, hInfected)
     else
         InjectPlayerClass(PickRandomZombieDefaultClass(), hInfected)
     end

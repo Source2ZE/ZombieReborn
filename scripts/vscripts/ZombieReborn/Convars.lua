@@ -7,6 +7,3 @@ Convars:RegisterConvar("zr_infect_spawn_mz_min_count", "2", "Minimum amount of M
 
 -- Knockback
 Convars:RegisterConvar("zr_knockback_scale", "5", "Knockback damage multiplier", FCVAR_RELEASE)
-
--- Player Class
-Convars:RegisterConvar("zr_mother_zombie_class", "MotherZombie", "Mother zombie class", FCVAR_RELEASE)
