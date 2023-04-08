@@ -12,8 +12,12 @@
 --]]
 
 ZRClass = {
-    Human = {},
+    Human = {}, --table
     Zombie = {},
+    Default = {
+        Human = {}, --array
+        Zombie = {},
+    },
 }
 
 function GenerateMetaTableConfig(tClass, parent)
@@ -42,11 +46,25 @@ end
 function AddHumanClass(tClass, name)
     GenerateMetaTableConfig(tClass, ZRClass.Human.Default)
     ZRClass.Human[name] = tClass
+    if tClass.team_default == 1 then
+        table.insert(ZRClass.Default.Human, tClass)
+    end
 end
 
 function AddZombieClass(tClass, name)
     GenerateMetaTableConfig(tClass, ZRClass.Zombie.Default)
     ZRClass.Zombie[name] = tClass
+    if tClass.team_default == 1 then
+        table.insert(ZRClass.Default.Zombie, tClass)
+    end
+end
+
+function PickRandomHumanDefaultClass()
+    return ZRClass.Default.Human[RandomInt(1, #ZRClass.Default.Human)]
+end
+
+function PickRandomZombieDefaultClass()
+    return ZRClass.Default.Zombie[RandomInt(1, #ZRClass.Default.Zombie)]
 end
 
 local tPlayerClassConfig = LoadKeyValues("cfg/zr/playerclass.cfg")
@@ -57,7 +75,13 @@ local CPlayerZombieDefault = tPlayerClassConfig.Zombie.Default
 GenerateMetaTableConfig(CPlayerZombieDefault, CBasePlayerPawn)
 
 ZRClass.Human.Default = CPlayerHumanDefault
+if CPlayerHumanDefault.team_default == 1 then
+    table.insert(ZRClass.Default.Human, CPlayerHumanDefault)
+end
 ZRClass.Zombie.Default = CPlayerZombieDefault
+if CPlayerZombieDefault.team_default == 1 then
+    table.insert(ZRClass.Default.Zombie, CPlayerZombieDefault)
+end
 
 --Do something when this class is injected onto the player
 function CPlayerHumanDefault:OnInjection()
@@ -99,15 +123,16 @@ end
 --Generating other classes from playerclass.cfg that overrides the default value/extends its functionality
 
 for k, v in pairs(tPlayerClassConfig.Human) do
-    if k ~= "Default" then
+    if k ~= "Default" and v.enabled then
         AddHumanClass(v, k)
     end
 end
 for k, v in pairs(tPlayerClassConfig.Zombie) do
-    if k ~= "Default" then
+    if k ~= "Default" and v.enabled then
         AddZombieClass(v, k)
     end
 end
+
 --print("Human Class: ")
 --table.dump(ZRClass.Human)
 --print("Zombie Class: ")
