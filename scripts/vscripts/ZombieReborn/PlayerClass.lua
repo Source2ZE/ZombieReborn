@@ -91,8 +91,8 @@ function CPlayerHumanBase:OnInjection()
     --like to set value directly on the player handle as well
     local model = thisClass.model[tostring(RandomInt(1, table.size(thisClass.model)))]
     self:SetModel(model)
-    self:SetHealth(thisClass.health)
     self:SetMaxHealth(thisClass.health)
+    self:SetHealth(thisClass.health)
     self:SetAbsScale(thisClass.scale)
     self:SetRenderColor(thisClass.color.r, thisClass.color.g, thisClass.color.b)
 end
@@ -102,8 +102,8 @@ function CPlayerZombieBase:OnInjection()
     local thisClass = self.zrclass
     local model = thisClass.model[tostring(RandomInt(1, table.size(thisClass.model)))]
     self:SetModel(model)
-    self:SetHealth(thisClass.health)
     self:SetMaxHealth(thisClass.health)
+    self:SetHealth(thisClass.health)
     self:SetAbsScale(thisClass.scale)
     self:SetRenderColor(thisClass.color.r, thisClass.color.g, thisClass.color.b)
     --Start Regenerating health

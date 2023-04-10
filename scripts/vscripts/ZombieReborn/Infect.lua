@@ -26,7 +26,33 @@ function Infect(hInflictor, hInfected, bKeepPosition)
     hInfected:SetAngles(vecAngles.x, vecAngles.y, vecAngles.z)
 end
 
+function InfectAsync(hInfected, bKeepPosition)
+    DoEntFireByInstanceHandle(hInfected, "runscriptcode", "Infect(nil, thisEntity, "..tostring(bKeepPosition)..")", 0.01, nil, nil)
+end
+
+function Cure(hPlayer, bKeepPosition)
+    local vecOrigin = hPlayer:GetOrigin()
+    local vecAngles = hPlayer:EyeAngles()
+
+    hPlayer:SetTeam(CS_TEAM_CT)
+    InjectPlayerClass(PickRandomHumanDefaultClass(), hPlayer)
+
+    if bKeepPosition == false then
+        return
+    end
+    hPlayer:SetOrigin(vecOrigin)
+    hPlayer:SetAngles(vecAngles.x, vecAngles.y, vecAngles.z)
+end
+
+function CureAsync(hPlayer, bKeepPosition)
+    DoEntFireByInstanceHandle(hPlayer, "runscriptcode", "Cure(thisEntity, "..tostring(bKeepPosition)..")", 0.01, nil, nil)
+end
+
 function Infect_PickMotherZombies()
+
+    --tell OnPlayerSpawn to not force switch human who's been picked as mother zombie
+    ZR_ZOMBIE_SPAWN_READY = true
+
     local iMZRatio = Convars:GetInt("zr_infect_spawn_mz_ratio")
     local iMZMinimumCount = Convars:GetInt("zr_infect_spawn_mz_min_count")
     local bSpawnType = (Convars:GetInt("zr_infect_spawn_type") == 0)
@@ -100,6 +126,9 @@ function Infect_PickMotherZombies()
 
     -- Mother zombie spawned
     ZR_ZOMBIE_SPAWNED = true
+
+    -- Disable CT respawn
+    Convars:SetInt("mp_respawn_on_death_ct", 0)
 end
 
 function Infect_OnRoundFreezeEnd()
