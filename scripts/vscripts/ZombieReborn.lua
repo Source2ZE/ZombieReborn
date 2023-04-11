@@ -7,7 +7,7 @@ require("ZombieReborn.util.timers")
 require("ZombieReborn.Convars")
 require("ZombieReborn.Infect")
 require("ZombieReborn.Knockback")
-require("ZombieReborn.RepeatKiller")
+require("ZombieReborn.RespawnToggle")
 require("ZombieReborn.AmmoReplenish")
 require("ZombieReborn.PlayerClass")
 
@@ -49,7 +49,7 @@ function OnRoundStart(event)
 
     --Setup various functions and gameplay elements
     SetAllHuman()
-    SetupRepeatKiller()
+    SetupRespawnToggler()
     SetupAmmoReplenish()
 
     Timers:RemoveTimer("MZSelection_Timer")
