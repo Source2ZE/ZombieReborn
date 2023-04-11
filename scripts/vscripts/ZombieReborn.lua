@@ -44,7 +44,6 @@ function OnRoundStart(event)
     Convars:SetInt("mp_respawn_on_death_ct", 1)
     --Convars:SetInt('mp_ignore_round_win_conditions',1)
 
-
     --print("Enabling spawn for T")
     ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
 
