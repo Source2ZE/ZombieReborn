@@ -41,7 +41,7 @@ function OnRoundStart(event)
     --Convars:SetInt('mp_ignore_round_win_conditions',1)
 
     ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
-    
+
     SetAllHuman()
     SetupRepeatKiller()
     SetupAmmoReplenish()
@@ -96,7 +96,7 @@ function OnPlayerDeath(event)
     if not ZR_ZOMBIE_SPAWNED or hVictim:GetTeam() == CS_TEAM_T then
         return
     end
-    
+
     --Allow the round to end if there's no CT left
     --ignore if zombie has yet to spawn or event come from zombie
     local tPlayerTable = Entities:FindAllByClassname("player")
@@ -132,7 +132,6 @@ function OnPlayerSpawn(event)
     --     --print("Forcing player to ct")
     --     CureAsync(hPlayer, false)
     -- end
-        
 end
 
 function OnItemEquip(event)

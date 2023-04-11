@@ -27,7 +27,7 @@ function Infect(hInflictor, hInfected, bKeepPosition)
 end
 
 function InfectAsync(hInfected, bKeepPosition)
-    DoEntFireByInstanceHandle(hInfected, "runscriptcode", "Infect(nil, thisEntity, "..tostring(bKeepPosition)..")", 0.01, nil, nil)
+    DoEntFireByInstanceHandle(hInfected, "runscriptcode", "Infect(nil, thisEntity, " .. tostring(bKeepPosition) .. ")", 0.01, nil, nil)
 end
 
 tCureList = {}
@@ -47,11 +47,10 @@ function Cure(hPlayer, bKeepPosition)
 end
 
 function CureAsync(hPlayer, bKeepPosition)
-    DoEntFireByInstanceHandle(hPlayer, "runscriptcode", "Cure(thisEntity, "..tostring(bKeepPosition)..")", 0.01, nil, nil)
+    DoEntFireByInstanceHandle(hPlayer, "runscriptcode", "Cure(thisEntity, " .. tostring(bKeepPosition) .. ")", 0.01, nil, nil)
 end
 
 function Infect_PickMotherZombies()
-
     --tell OnPlayerSpawn to not force switch human who's been picked as mother zombie
     ZR_ZOMBIE_SPAWN_READY = true
 
