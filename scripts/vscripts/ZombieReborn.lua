@@ -34,14 +34,21 @@ function OnRoundStart(event)
         clientcmd = SpawnEntityFromTableSynchronous("point_clientcommand", { targetname = "vscript_clientcommand" })
     end
 
-    --print("Enabling spawn for T")
+    --Here we force some cvars that are essential for the scripts to work
+    Convars:SetInt("mp_weapons_allow_pistols", 3)
+    Convars:SetInt("mp_weapons_allow_smgs", 3)
+    Convars:SetInt("mp_weapons_allow_heavy", 3)
+    Convars:SetInt("mp_weapons_allow_rifles", 3)
 
     Convars:SetInt("mp_respawn_on_death_t", 1)
     Convars:SetInt("mp_respawn_on_death_ct", 1)
     --Convars:SetInt('mp_ignore_round_win_conditions',1)
 
+
+    --print("Enabling spawn for T")
     ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
 
+    --Setup various functions and gameplay elements
     SetAllHuman()
     SetupRepeatKiller()
     SetupAmmoReplenish()
