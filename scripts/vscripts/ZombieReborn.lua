@@ -84,32 +84,25 @@ end
 -- player_death doesn't have dmg_health, so it has a separate callback
 function OnPlayerDeath(event)
     --__DumpScope(0, event)
-    if event.weapon == "" or event.attacker_pawn == -1 then
-        return
-    end
+    -- attacker_pawn == -1 when player died from trigger hurt
+    -- if event.weapon == "" or event.attacker_pawn == -1 then
+    --     return
+    -- end
     local hAttacker = EHandleToHScript(event.attacker_pawn)
     local hVictim = EHandleToHScript(event.userid_pawn)
 
-    if hAttacker:GetTeam() == CS_TEAM_T and hVictim:GetTeam() == CS_TEAM_CT then
-        --Prevent Infecting the player in the same tick as the player is dying
-        InfectAsync(hVictim, true)
-    end
-
-    -- Infect Humans that died after first infection has started
-    if ZR_ROUND_STARTED and ZR_ZOMBIE_SPAWNED and hVictim:GetTeam() == CS_TEAM_CT then
-        InfectAsync(hVictim, false)
-    end
-
-    --Allow the round to end if there's no CT left
-    --ignore if zombie has yet to spawn or event come from zombie
+    --When player died from switching team, their GetTeam() is the team they are switching to
+    --ignore zombie or during round start
     if not ZR_ZOMBIE_SPAWNED or hVictim:GetTeam() == CS_TEAM_T then
         return
     end
-
+    
+    --Allow the round to end if there's no CT left
+    --ignore if zombie has yet to spawn or event come from zombie
     local tPlayerTable = Entities:FindAllByClassname("player")
     for _, player in ipairs(tPlayerTable) do
         if player:GetTeam() == CS_TEAM_CT then
-            --ignore if the player on ct team is the current hVictim
+            --return if the player on ct team is the current hVictim
             --since they have yet to switch team from Infect
             if player ~= hVictim and player:IsAlive() then
                 return
@@ -120,6 +113,7 @@ function OnPlayerDeath(event)
     --print("Disabling spawn for T")
     --Side effect: the last player infected/died doesn't respawn until the next round start
     Convars:SetInt("mp_respawn_on_death_t", 0)
+    Convars:SetInt("mp_respawn_on_death_ct", 0)
 end
 
 function OnPlayerSpawn(event)
@@ -127,17 +121,17 @@ function OnPlayerSpawn(event)
     local hPlayer = EHandleToHScript(event.userid_pawn)
 
     -- Infect late spawners & change mother zombie who died back to normal zombie
-    if ZR_ZOMBIE_SPAWNED then
+    if ZR_ZOMBIE_SPAWNED and tCureList[hPlayer] == nil then
         --Delay this too since sometime sethealth on player doesn't work
         InfectAsync(hPlayer, false)
         return
     end
 
     -- force switch team for player who tries to join the T side
-    if not ZR_ZOMBIE_SPAWN_READY and hPlayer:GetTeam() == CS_TEAM_T then
-        --print("Forcing player to ct")
-        CureAsync(hPlayer, false)
-    end
+    -- if not ZR_ZOMBIE_SPAWN_READY and hPlayer:GetTeam() == CS_TEAM_T then
+    --     --print("Forcing player to ct")
+    --     CureAsync(hPlayer, false)
+    -- end
         
 end
 
@@ -162,6 +156,17 @@ function OnRoundEnd(event)
     ZR_ZOMBIE_SPAWN_READY = false
 end
 
+function OnPlayerTeam(event)
+    --__DumpScope(0, event)
+    local hPlayer = EHandleToHScript(event.userid_pawn)
+    if ZR_ZOMBIE_SPAWNED and event.team == CS_TEAM_CT and tCureList[hPlayer] == nil then
+        --SetTeam doesn't work on the same tick as well :pepemeltdown:
+        DoEntFireByInstanceHandle(hPlayer, "runscriptcode", "thisEntity:SetTeam(CS_TEAM_T)", 0.01, nil, nil)
+    elseif not ZR_ZOMBIE_SPAWN_READY and event.team == CS_TEAM_T then
+        DoEntFireByInstanceHandle(hPlayer, "runscriptcode", "thisEntity:SetTeam(CS_TEAM_CT)", 0.01, nil, nil)
+    end
+end
+
 tListenerIds = {
     ListenToGameEvent("player_hurt", OnPlayerHurt, nil),
     ListenToGameEvent("player_death", OnPlayerDeath, nil),
@@ -172,4 +177,5 @@ tListenerIds = {
     ListenToGameEvent("round_freeze_end", Infect_OnRoundFreezeEnd, nil),
     ListenToGameEvent("item_equip", OnItemEquip, nil),
     ListenToGameEvent("round_end", OnRoundEnd, nil),
+    ListenToGameEvent("player_team", OnPlayerTeam, nil),
 }

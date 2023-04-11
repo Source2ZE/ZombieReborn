@@ -30,13 +30,15 @@ function InfectAsync(hInfected, bKeepPosition)
     DoEntFireByInstanceHandle(hInfected, "runscriptcode", "Infect(nil, thisEntity, "..tostring(bKeepPosition)..")", 0.01, nil, nil)
 end
 
+tCureList = {}
 function Cure(hPlayer, bKeepPosition)
     local vecOrigin = hPlayer:GetOrigin()
     local vecAngles = hPlayer:EyeAngles()
 
+    tCureList[hPlayer] = true
     hPlayer:SetTeam(CS_TEAM_CT)
     InjectPlayerClass(PickRandomHumanDefaultClass(), hPlayer)
-
+    tCureList[hPlayer] = nil
     if bKeepPosition == false then
         return
     end
@@ -126,9 +128,6 @@ function Infect_PickMotherZombies()
 
     -- Mother zombie spawned
     ZR_ZOMBIE_SPAWNED = true
-
-    -- Disable CT respawn
-    Convars:SetInt("mp_respawn_on_death_ct", 0)
 end
 
 function Infect_OnRoundFreezeEnd()
