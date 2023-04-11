@@ -13,6 +13,7 @@ require("ZombieReborn.PlayerClass")
 
 ZR_ROUND_STARTED = false
 ZR_ZOMBIE_SPAWNED = false -- Check if first zombie spawned
+ZR_ZOMBIE_SPAWN_READY = false -- Check if first zombie is spawning
 
 Convars:SetInt("mp_autoteambalance", 0)
 Convars:SetInt("mp_limitteams", 0)
@@ -36,6 +37,7 @@ function OnRoundStart(event)
     --print("Enabling spawn for T")
 
     Convars:SetInt("mp_respawn_on_death_t", 1)
+    Convars:SetInt("mp_respawn_on_death_ct", 1)
     --Convars:SetInt('mp_ignore_round_win_conditions',1)
 
     ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
@@ -50,19 +52,18 @@ function OnRoundStart(event)
 end
 
 function SetAllHuman()
+    local bRespawn = Convars:GetBool("mp_respawn_on_death_ct")
     Convars:SetBool("mp_respawn_on_death_ct", true)
 
     for i = 1, 64 do
         local hController = EntIndexToHScript(i)
 
         if hController ~= nil then
-            hController:GetPawn():SetTeam(CS_TEAM_CT)
-            --SetPlayerClass(hController:GetPawn(), "human")
-            InjectPlayerClass(PickRandomHumanDefaultClass(), hController:GetPawn())
+            Cure(hController:GetPawn(), true)
         end
     end
 
-    Convars:SetBool("mp_respawn_on_death_ct", false)
+    Convars:SetBool("mp_respawn_on_death_ct", bRespawn)
 end
 
 function OnPlayerHurt(event)
@@ -83,33 +84,25 @@ end
 -- player_death doesn't have dmg_health, so it has a separate callback
 function OnPlayerDeath(event)
     --__DumpScope(0, event)
-    if event.weapon == "" or event.attacker_pawn == -1 then
-        return
-    end
+    -- attacker_pawn == -1 when player died from trigger hurt
+    -- if event.weapon == "" or event.attacker_pawn == -1 then
+    --     return
+    -- end
     local hAttacker = EHandleToHScript(event.attacker_pawn)
     local hVictim = EHandleToHScript(event.userid_pawn)
 
-    --Prevent Infecting the player in the same tick as the player dying
-    if hAttacker:GetTeam() == CS_TEAM_T and hVictim:GetTeam() == CS_TEAM_CT then
-        DoEntFireByInstanceHandle(hVictim, "runscriptcode", "Infect(nil, thisEntity, true)", 0.01, nil, nil)
-    end
-
-    -- Infect Humans that died after first infection has started
-    if ZR_ROUND_STARTED and ZR_ZOMBIE_SPAWNED and hVictim:GetTeam() == CS_TEAM_CT then
-        --Prevent Infecting the player in the same tick as the player dying
-        DoEntFireByInstanceHandle(hVictim, "runscriptcode", "Infect(nil, thisEntity, false)", 0.01, nil, nil)
-    end
-
-    --Allow the round to end if there's no CT left
-    --ignore if zombie has yet to spawn
-    if not ZR_ZOMBIE_SPAWNED then
+    --When player died from switching team, their GetTeam() is the team they are switching to
+    --ignore zombie or during round start
+    if not ZR_ZOMBIE_SPAWNED or hVictim:GetTeam() == CS_TEAM_T then
         return
     end
 
+    --Allow the round to end if there's no CT left
+    --ignore if zombie has yet to spawn or event come from zombie
     local tPlayerTable = Entities:FindAllByClassname("player")
     for _, player in ipairs(tPlayerTable) do
         if player:GetTeam() == CS_TEAM_CT then
-            --ignore if the player on ct team is the current hVictim
+            --return if the player on ct team is the current hVictim
             --since they have yet to switch team from Infect
             if player ~= hVictim and player:IsAlive() then
                 return
@@ -120,23 +113,32 @@ function OnPlayerDeath(event)
     --print("Disabling spawn for T")
     --Side effect: the last player infected/died doesn't respawn until the next round start
     Convars:SetInt("mp_respawn_on_death_t", 0)
+    Convars:SetInt("mp_respawn_on_death_ct", 0)
 end
 
--- Infect late spawners
 function OnPlayerSpawn(event)
     --__DumpScope(0, event)
     local hPlayer = EHandleToHScript(event.userid_pawn)
 
-    if ZR_ZOMBIE_SPAWNED and hPlayer:GetTeam() == CS_TEAM_CT then
-        Infect(nil, hPlayer, true)
+    -- Infect late spawners & change mother zombie who died back to normal zombie
+    if ZR_ZOMBIE_SPAWNED and tCureList[hPlayer] == nil then
+        --Delay this too since sometime sethealth on player doesn't work
+        InfectAsync(hPlayer, false)
+        return
     end
+
+    -- force switch team for player who tries to join the T side
+    -- if not ZR_ZOMBIE_SPAWN_READY and hPlayer:GetTeam() == CS_TEAM_T then
+    --     --print("Forcing player to ct")
+    --     CureAsync(hPlayer, false)
+    -- end
 end
 
 function OnItemEquip(event)
     --__DumpScope(0, event)
     local hPlayer = EHandleToHScript(event.userid_pawn)
 
-    if ZR_ZOMBIE_SPAWNED and hPlayer:GetTeam() == CS_TEAM_T then
+    if hPlayer:GetTeam() == CS_TEAM_T then
         local tInventory = hPlayer:GetEquippedWeapons()
 
         for key, value in ipairs(tInventory) do
@@ -150,6 +152,18 @@ end
 
 function OnRoundEnd(event)
     ZR_ZOMBIE_SPAWNED = false
+    ZR_ZOMBIE_SPAWN_READY = false
+end
+
+function OnPlayerTeam(event)
+    --__DumpScope(0, event)
+    local hPlayer = EHandleToHScript(event.userid_pawn)
+    if ZR_ZOMBIE_SPAWNED and event.team == CS_TEAM_CT and tCureList[hPlayer] == nil then
+        --SetTeam doesn't work on the same tick as well :pepemeltdown:
+        DoEntFireByInstanceHandle(hPlayer, "runscriptcode", "thisEntity:SetTeam(CS_TEAM_T)", 0.01, nil, nil)
+    elseif not ZR_ZOMBIE_SPAWN_READY and event.team == CS_TEAM_T then
+        DoEntFireByInstanceHandle(hPlayer, "runscriptcode", "thisEntity:SetTeam(CS_TEAM_CT)", 0.01, nil, nil)
+    end
 end
 
 tListenerIds = {
@@ -162,4 +176,5 @@ tListenerIds = {
     ListenToGameEvent("round_freeze_end", Infect_OnRoundFreezeEnd, nil),
     ListenToGameEvent("item_equip", OnItemEquip, nil),
     ListenToGameEvent("round_end", OnRoundEnd, nil),
+    ListenToGameEvent("player_team", OnPlayerTeam, nil),
 }
