@@ -21,6 +21,5 @@ function ToggleRespawn()
         Convars:SetInt('mp_respawn_on_death_ct', 1)
         ScriptPrintMessageChatAll(" \x04[Zombie:Reborn]\x01 Respawning is enabled!")
     end
-
     bRespawnToggle = not bRespawnToggle
 end
