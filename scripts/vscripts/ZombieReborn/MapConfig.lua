@@ -12,8 +12,10 @@ end
 
 function ExecuteMapConfig()
     print("Executing config!")
+    
     for k, v in pairs(tMapConfigs) do
         print(k .. " " .. v)
         Convars:SetInt(k, v)
     end
+
 end
