@@ -40,9 +40,7 @@ function OnRoundStart(event)
     Convars:SetInt("mp_weapons_allow_heavy", 3)
     Convars:SetInt("mp_weapons_allow_rifles", 3)
     Convars:SetInt("mp_give_player_c4", 0)
-    
     Convars:SetInt("mp_friendlyfire", 0)
-
     Convars:SetInt("mp_respawn_on_death_t", 1)
     Convars:SetInt("mp_respawn_on_death_ct", 1)
     --Convars:SetInt('mp_ignore_round_win_conditions',1)
