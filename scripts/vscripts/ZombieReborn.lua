@@ -26,7 +26,7 @@ if tListenerIds then
 end
 
 --Load a custom map config, if it exists
-SendToServerConsole("exec " .. "zr/mapcfgs/" .. GetMapName() .. ".cfg")
+SendToServerConsole("exec " .. "zr/maps/" .. GetMapName() .. ".cfg")
 
 -- round start logic
 function OnRoundStart(event)
