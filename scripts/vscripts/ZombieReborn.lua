@@ -25,6 +25,9 @@ if tListenerIds then
     end
 end
 
+--Load a custom map config, if it exists
+SendToServerConsole("exec " .. "zr/maps/" .. GetMapName() .. ".cfg")
+
 -- round start logic
 function OnRoundStart(event)
     -- Make sure point_clientcommand exists
