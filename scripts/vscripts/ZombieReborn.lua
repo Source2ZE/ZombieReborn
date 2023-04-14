@@ -68,7 +68,7 @@ function SetAllHuman()
     for i = 1, 64 do
         local hController = EntIndexToHScript(i)
 
-        if hController ~= nil then
+        if hController ~= nil and hController:GetPawn() ~= nil then
             Cure(hController:GetPawn(), true)
         end
     end
