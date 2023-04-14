@@ -12,7 +12,7 @@ require("ZombieReborn.AmmoReplenish")
 require("ZombieReborn.PlayerClass")
 
 ZR_ROUND_STARTED = false
-ZR_ZOMBIE_SPAWNED = false -- Check if first zombie spawned
+ZR_ZOMBIE_SPAWNED = false     -- Check if first zombie spawned
 ZR_ZOMBIE_SPAWN_READY = false -- Check if first zombie is spawning
 
 Convars:SetInt("mp_autoteambalance", 0)
@@ -49,7 +49,8 @@ function OnRoundStart(event)
     --Convars:SetInt('mp_ignore_round_win_conditions',1)
 
     --print("Enabling spawn for T")
-    ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
+    ScriptPrintMessageChatAll(
+        "The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
 
     --Setup various functions and gameplay elements
     SetAllHuman()
@@ -81,8 +82,8 @@ function OnPlayerHurt(event)
     if event.weapon == "" or event.attacker_pawn == nil then
         return
     end
-    local hAttacker = EHandleToHScript(event.attacker_pawn)
-    local hVictim = EHandleToHScript(event.userid_pawn)
+    local hAttacker = EHandleToPlayerPawn(event.attacker_pawn)
+    local hVictim = EHandleToPlayerPawn(event.userid_pawn)
 
     if hAttacker:GetTeam() == CS_TEAM_CT and hVictim:GetTeam() == CS_TEAM_T then
         Knockback_Apply(hAttacker, hVictim, event.dmg_health, event.weapon)
@@ -98,8 +99,8 @@ function OnPlayerDeath(event)
     -- if event.weapon == "" or event.attacker_pawn == -1 then
     --     return
     -- end
-    local hAttacker = EHandleToHScript(event.attacker_pawn)
-    local hVictim = EHandleToHScript(event.userid_pawn)
+    local hAttacker = EHandleToPlayerPawn(event.attacker_pawn)
+    local hVictim = EHandleToPlayerPawn(event.userid_pawn)
 
     --When player died from switching team, their GetTeam() is the team they are switching to
     --ignore zombie or during round start
@@ -128,7 +129,7 @@ end
 
 function OnPlayerSpawn(event)
     --__DumpScope(0, event)
-    local hPlayer = EHandleToHScript(event.userid_pawn)
+    local hPlayer = EHandleToPlayerPawn(event.userid_pawn)
 
     -- Infect late spawners & change mother zombie who died back to normal zombie
     if ZR_ZOMBIE_SPAWNED and tCureList[hPlayer] == nil then
@@ -146,8 +147,7 @@ end
 
 function OnItemEquip(event)
     --__DumpScope(0, event)
-    local hPlayer = EHandleToHScript(event.userid_pawn)
-
+    local hPlayer = EHandleToPlayerPawn(event.userid_pawn)
     if hPlayer:GetTeam() == CS_TEAM_T then
         local tInventory = hPlayer:GetEquippedWeapons()
 
@@ -167,7 +167,7 @@ end
 
 function OnPlayerTeam(event)
     --__DumpScope(0, event)
-    local hPlayer = EHandleToHScript(event.userid_pawn)
+    local hPlayer = EHandleToPlayerPawn(event.userid_pawn)
     if ZR_ZOMBIE_SPAWNED and event.team == CS_TEAM_CT and tCureList[hPlayer] == nil then
         --SetTeam doesn't work on the same tick as well :pepemeltdown:
         DoEntFireByInstanceHandle(hPlayer, "runscriptcode", "thisEntity:SetTeam(CS_TEAM_T)", 0.01, nil, nil)
