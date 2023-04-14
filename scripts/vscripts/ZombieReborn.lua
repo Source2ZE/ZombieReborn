@@ -12,7 +12,7 @@ require("ZombieReborn.AmmoReplenish")
 require("ZombieReborn.PlayerClass")
 
 ZR_ROUND_STARTED = false
-ZR_ZOMBIE_SPAWNED = false     -- Check if first zombie spawned
+ZR_ZOMBIE_SPAWNED = false -- Check if first zombie spawned
 ZR_ZOMBIE_SPAWN_READY = false -- Check if first zombie is spawning
 
 Convars:SetInt("mp_autoteambalance", 0)
@@ -49,8 +49,7 @@ function OnRoundStart(event)
     --Convars:SetInt('mp_ignore_round_win_conditions',1)
 
     --print("Enabling spawn for T")
-    ScriptPrintMessageChatAll(
-        "The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
+    ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
 
     --Setup various functions and gameplay elements
     SetAllHuman()
