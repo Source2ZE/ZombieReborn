@@ -32,7 +32,7 @@ end
 tRecordedGrenadePosition = {}
 function Knockback_OnGrenadeDetonate(event)
     --__DumpScope(0, event)
-    local hThrower = EHandleToPlayerPawn(event.userid_pawn)
+    local hThrower = EHandleToHScript(event.userid_pawn)
     local vecDetonatePosition = Vector(event.x, event.y, event.z)
     tRecordedGrenadePosition[hThrower] = vecDetonatePosition
 end
@@ -40,7 +40,7 @@ end
 tRecordedMolotovPosition = {}
 function Knockback_OnMolotovDetonate(event)
     --__DumpScope(0, event)
-    local hThrower = EHandleToPlayerPawn(event.userid_pawn)
+    local hThrower = EHandleToHScript(event.userid_pawn)
     local vecDetonatePosition = Vector(event.x, event.y, event.z)
     tRecordedMolotovPosition[hThrower] = vecDetonatePosition
 end
