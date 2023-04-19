@@ -99,9 +99,6 @@ end
 
 --Do something when this class is injected onto the player
 function CPlayerHumanBase:OnInjection()
-    --accessing value indirectly through the player handle would also work
-    --such as self.health. But this value might be overriden by mapper who would
-    --like to set value directly on the player handle as well
     local model = self.model[tostring(RandomInt(1, table.size(self.model)))]
     self:SetModel(model)
     self:SetMaxHealth(self.health)
@@ -133,8 +130,7 @@ function CPlayerZombieBase:Release()
     self:SetContextThink("Regen", nil, 0)
 end
 
---Generating other classes from playerclass.cfg that overrides the default value/extends its functionality
-
+--Generating rest of the classes from playerclass.cfg that overrides the default value/extends its functionality
 for k, v in pairs(tPlayerClassConfig.Human) do
     if k ~= "Base" and v.enabled then
         AddHumanClass(v, k)
@@ -176,6 +172,7 @@ end
 
 local OnWeaponFired = function(event)
     local hPlayer = EHandleToHScript(event.userid_pawn)
+    hPlayer = GetOrCreateZRPlayer(hPlayer)
     if hPlayer:IsInstance(CPlayerAdmin) then 
         hPlayer:LaunchGrenade()
     end
