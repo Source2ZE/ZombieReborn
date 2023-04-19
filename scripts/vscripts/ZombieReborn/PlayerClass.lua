@@ -19,6 +19,20 @@ ZRClass = {
         Zombie = {},
     },
 }
+ZRPlayer = {}
+
+function GetOrCreateZRPlayer(hPly)
+    if hPly.__zr__ then
+        return hPly
+    elseif ZRPlayer[hPly] then
+        return ZRPlayer[hPly]
+    end
+    local hFakePly = vlua.clone(hPly)
+    ZRPlayer[hPly] = hFakePly
+    -- To distinguish ZRPlayer from normal player handle
+    hFakePly.__zr__ = true
+    return hFakePly
+end
 
 function GenerateMetaTableConfig(tClass, parent)
     local mt = {
@@ -34,13 +48,13 @@ function GenerateMetaTableConfig(tClass, parent)
     setmetatable(tClass, mt)
 end
 
-function InjectPlayerClass(tClass, player)
-    if player.Release then
-        player:Release()
+function InjectPlayerClass(tClass, hPly)
+    hPly = GetOrCreateZRPlayer(hPly)
+    if hPly.Release then
+        hPly:Release()
     end
-    setmetatable(player, tClass.mt)
-    player.zrclass = tClass
-    player:OnInjection()
+    setmetatable(hPly, tClass.mt)
+    hPly:OnInjection()
 end
 
 function AddHumanClass(tClass, name)
@@ -85,34 +99,33 @@ end
 
 --Do something when this class is injected onto the player
 function CPlayerHumanBase:OnInjection()
-    local thisClass = self.zrclass
     --accessing value indirectly through the player handle would also work
     --such as self.health. But this value might be overriden by mapper who would
     --like to set value directly on the player handle as well
-    local model = thisClass.model[tostring(RandomInt(1, table.size(thisClass.model)))]
+    local model = self.model[tostring(RandomInt(1, table.size(self.model)))]
     self:SetModel(model)
-    self:SetMaxHealth(thisClass.health)
-    self:SetHealth(thisClass.health)
-    self:SetAbsScale(thisClass.scale)
-    self:SetRenderColor(thisClass.color.r, thisClass.color.g, thisClass.color.b)
+    self:SetMaxHealth(self.health)
+    self:SetHealth(self.health)
+    self:SetAbsScale(self.scale)
+    self:SetRenderColor(self.color.r, self.color.g, self.color.b)
 end
 
 --Do something when this class is injected onto the player
 function CPlayerZombieBase:OnInjection()
-    local thisClass = self.zrclass
-    local model = thisClass.model[tostring(RandomInt(1, table.size(thisClass.model)))]
+    local model = self.model[tostring(RandomInt(1, table.size(self.model)))]
     self:SetModel(model)
-    self:SetMaxHealth(thisClass.health)
-    self:SetHealth(thisClass.health)
-    self:SetAbsScale(thisClass.scale)
-    self:SetRenderColor(thisClass.color.r, thisClass.color.g, thisClass.color.b)
+    self:SetMaxHealth(self.health)
+    self:SetHealth(self.health)
+    self:SetAbsScale(self.scale)
+    self:SetRenderColor(self.color.r, self.color.g, self.color.b)
     --Start Regenerating health
     self:SetContextThink("Regen", self.Regen, 0)
 end
 
 function CPlayerZombieBase:Regen()
-    self:SetHealth(Clamp(self:GetHealth() + self.zrclass.health_regen_count, 0, self.health))
-    return self.zrclass.health_regen_interval
+    self = GetOrCreateZRPlayer(self) --self is somehow a normal player handle here
+    self:SetHealth(Clamp(self:GetHealth() + self.health_regen_count, 0, self.health))
+    return self.health_regen_interval
 end
 --Optional: Do some clean up when player is freed from this class
 function CPlayerZombieBase:Release()
