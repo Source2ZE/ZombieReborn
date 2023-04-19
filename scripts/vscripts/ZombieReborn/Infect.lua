@@ -147,18 +147,18 @@ function Infect_OnRoundFreezeEnd()
     Timers:CreateTimer("MZSelection_Timer", {
         callback = function()
             if MZSelection_Countdown <= 0 then
-                ScriptPrintMessageCenterAll("First infection has started!")
-                ScriptPrintMessageChatAll(" \x04[Zombie:Reborn]\x01 First infection has started! Good luck, survivors!")
+                ScriptPrintMessageCenterAll(tr("First infection has started!"))
+                ScriptPrintMessageChatAll(tr(" \x04[Zombie:Reborn]\x01 First infection has started! Good luck, survivors!"))
                 Infect_PickMotherZombies()
                 Timers:RemoveTimer("MZSelection_Timer")
             elseif MZSelection_Countdown <= 15 then
                 if MZSelection_Countdown == 1 then
-                    ScriptPrintMessageCenterAll("First infection in \x071 second\x01!")
+                    ScriptPrintMessageCenterAll(tr("First infection in \x071 second\x01!"))
                 else
-                    ScriptPrintMessageCenterAll("First infection in \x07" .. MZSelection_Countdown .. " seconds\x01!")
+                    ScriptPrintMessageCenterAll(string.format(tr("First infection in \x07%s seconds\x01!"), MZSelection_Countdown))
                 end
                 if MZSelection_Countdown % 5 == 0 then
-                    ScriptPrintMessageChatAll(" \x04[Zombie:Reborn]\x01 First infection in \x07" .. MZSelection_Countdown .. " seconds\x01!")
+                    ScriptPrintMessageChatAll(string.format(tr(" \x04[Zombie:Reborn]\x01 First infection in \x07%s seconds\x01!"), MZSelection_Countdown))
                 end
             end
             MZSelection_Countdown = MZSelection_Countdown - 1

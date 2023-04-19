@@ -3,6 +3,7 @@ print("Starting ZombieReborn!")
 require("ZombieReborn.util.const")
 require("ZombieReborn.util.functions")
 require("ZombieReborn.util.timers")
+require("ZombieReborn.util.translate")
 
 require("ZombieReborn.Convars")
 require("ZombieReborn.Infect")
@@ -49,7 +50,7 @@ function OnRoundStart(event)
     --Convars:SetInt('mp_ignore_round_win_conditions',1)
 
     --print("Enabling spawn for T")
-    ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
+    ScriptPrintMessageChatAll(tr("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them."))
 
     --Setup various functions and gameplay elements
     SetAllHuman()
