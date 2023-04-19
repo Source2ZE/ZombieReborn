@@ -3,7 +3,7 @@ g_TranslateTable = {}
 
 function tr(text)
     local language = Convars:GetStr("zr_language")
-    if not language or language == "" then
+    if not language or language == "" or language == "english" then
         return text
     end
 
