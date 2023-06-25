@@ -17,7 +17,6 @@ ZR_ZOMBIE_SPAWN_READY = false -- Check if first zombie is spawning
 
 Convars:SetInt("mp_autoteambalance", 0)
 Convars:SetInt("mp_limitteams", 0)
-Convars:SetStr("bot_quota_mode", "fill")
 
 --remove duplicated listeners upon manual reload
 if tListenerIds then
@@ -47,6 +46,7 @@ function OnRoundStart(event)
     Convars:SetInt("mp_friendlyfire", 0)
     Convars:SetInt("mp_respawn_on_death_t", 1)
     Convars:SetInt("mp_respawn_on_death_ct", 1)
+    Convars:SetStr("bot_quota_mode", "fill")
     --Convars:SetInt('mp_ignore_round_win_conditions',1)
 
     --print("Enabling spawn for T")
