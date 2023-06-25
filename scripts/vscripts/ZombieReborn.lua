@@ -132,8 +132,10 @@ function OnPlayerSpawn(event)
     local hPlayer = EHandleToHScript(event.userid_pawn)
 
     -- Infect late spawners & change mother zombie who died back to normal zombie
-    if ZR_ZOMBIE_SPAWNED and tCureList[hPlayer] == nil then
+    -- Also don't do this if the player spawns as a spectator
+    if hPlayer:GetTeam() >= CS_TEAM_T and ZR_ZOMBIE_SPAWNED and tCureList[hPlayer] == nil then
         --Delay this too since sometime sethealth on player doesn't work
+        --print("Infecting a late joiner...")
         InfectAsync(hPlayer, false)
         return
     end
