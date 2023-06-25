@@ -17,6 +17,7 @@ ZR_ZOMBIE_SPAWN_READY = false -- Check if first zombie is spawning
 
 Convars:SetInt("mp_autoteambalance", 0)
 Convars:SetInt("mp_limitteams", 0)
+Convars:SetStr("bot_quota_mode", "fill")
 
 --remove duplicated listeners upon manual reload
 if tListenerIds then
@@ -78,7 +79,7 @@ end
 
 function OnPlayerHurt(event)
     --__DumpScope(0, event)
-    if event.weapon == "" or event.attacker_pawn == nil then
+    if event.weapon == "" or event.attacker_pawn == nil or event.dmg_health == ZR_INFECT_DAMAGE then
         return
     end
     local hAttacker = EHandleToHScript(event.attacker_pawn)
