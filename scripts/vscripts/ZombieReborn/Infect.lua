@@ -1,8 +1,14 @@
 ZR_INFECT_DAMAGE = 3141
 
-function Infect(hInflictor, hInfected, bKeepPosition)
+function Infect(hInflictor, hInfected, bKeepPosition, bDead)
     local vecOrigin = hInfected:GetOrigin()
     local vecAngles = hInfected:EyeAngles()
+
+    --Human was already killed by the knife itself, delay the infection a bit
+    if bDead then
+        InfectAsync(hInfected, bKeepPosition, false)
+        return
+    end
 
     --Give proper kill credit
     --By killing the player before they suicide from SetTeam
@@ -28,8 +34,8 @@ function Infect(hInflictor, hInfected, bKeepPosition)
     hInfected:SetAngles(vecAngles.x, vecAngles.y, vecAngles.z)
 end
 
-function InfectAsync(hInfected, bKeepPosition)
-    DoEntFireByInstanceHandle(hInfected, "runscriptcode", "Infect(nil, thisEntity, " .. tostring(bKeepPosition) .. ")", 0.01, nil, nil)
+function InfectAsync(hInfected, bKeepPosition, bKilled)
+    DoEntFireByInstanceHandle(hInfected, "runscriptcode", "Infect(nil, thisEntity, " .. tostring(bKeepPosition) .. "," .. tostring(bKilled) .. ")", 0.01, nil, nil)
 end
 
 tCureList = {}
@@ -123,7 +129,7 @@ function Infect_PickMotherZombies()
     -- (in the future, when we surely get access to player's steamid and nickname from lua)
 
     for index, player in pairs(tMotherZombies) do
-        Infect(nil, player, bSpawnType)
+        Infect(nil, player, bSpawnType, false)
     end
     print("Player count: " .. iPlayerCount .. ", Mother Zombies Spawned: " .. iMotherZombieCount)
 
