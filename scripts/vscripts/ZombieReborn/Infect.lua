@@ -1,3 +1,5 @@
+ZR_INFECT_DAMAGE = 3141
+
 function Infect(hInflictor, hInfected, bKeepPosition)
     local vecOrigin = hInfected:GetOrigin()
     local vecAngles = hInfected:EyeAngles()
@@ -7,7 +9,7 @@ function Infect(hInflictor, hInfected, bKeepPosition)
     if hInflictor then
         --SOS: Cannot get hAttacker to work
         --CTakeDamageInfo CreateDamageInfo (handle hInflictor, handle hAttacker, Vector force, Vector hitPos, float flDamage, int damageTypes)
-        local cDamageInfo = CreateDamageInfo(hInflictor, nil, Vector(0, 0, 100), Vector(0, 0, 0), 1000, DMG_BULLET)
+        local cDamageInfo = CreateDamageInfo(hInflictor, nil, Vector(0, 0, 100), Vector(0, 0, 0), ZR_INFECT_DAMAGE, DMG_BULLET)
         hInfected:TakeDamage(cDamageInfo)
         DestroyDamageInfo(cDamageInfo)
     end
