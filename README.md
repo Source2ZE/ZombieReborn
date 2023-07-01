@@ -1,5 +1,7 @@
 # ZombieReborn
 
+**NOTE: Lua VScript was disabled in the Mirage update, and as of the Nuke update we now have strong reason to believe a completely new scripting system is on the way. Therefore this project should generally be considered paused until the CS2 scripting situation has stabilized.**
+
 An experimental implementation of Zombie Escape in Counter-Strike 2 using the Lua [VScript API](https://cs2.poggu.me/dumped-data/vscript-list).
 
 [Join our Discord](https://discord.gg/QsSGf9ZEVs) for development discussion and to keep up to date!
@@ -15,6 +17,7 @@ Knockback will not function out of the box, as Movement Unlocker is required sim
 You can find the documentation of various Zombie:Reborn features [here](../../wiki/Documentation).
 
 ## Current issues
+
 You can find the current issues with CS2 we'd like to report to Valve [here](../../wiki/CS2-Issues).
 
 ## The Future?
