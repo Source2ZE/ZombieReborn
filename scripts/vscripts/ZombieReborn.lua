@@ -70,7 +70,8 @@ function SetAllHuman()
         local hController = EntIndexToHScript(i)
 
         if hController ~= nil and hController:GetPawn() ~= nil then
-            Cure(hController:GetPawn(), true)
+            --I have absolutely no idea why, but this has to be delayed now
+            CureAsync(hController:GetPawn(), true)
         end
     end
 

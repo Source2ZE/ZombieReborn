@@ -8,6 +8,9 @@ function Infect(hInflictor, hInfected, bKeepPosition, bDead)
     if bDead then
         InfectAsync(hInfected, bKeepPosition, false)
         return
+    elseif hInfected:GetHealth() == 0 then
+        --Infect was called on a spectator somehow during initial infection, nope out
+        return
     end
 
     --Give proper kill credit
