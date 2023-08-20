@@ -1,6 +1,8 @@
 ZR_INFECT_DAMAGE = 3141
 
 function Infect(hInflictor, hInfected, bKeepPosition, bDead)
+    DebugPrint("Infecting a player")
+
     local vecOrigin = hInfected:GetOrigin()
     local vecAngles = hInfected:EyeAngles()
 
@@ -10,27 +12,34 @@ function Infect(hInflictor, hInfected, bKeepPosition, bDead)
         return
     elseif hInfected:GetHealth() == 0 then
         --Infect was called on a spectator somehow during initial infection, nope out
+        print("Attempted to infect a spectator!")
         return
     end
 
     --Give proper kill credit
     --By killing the player before they suicide from SetTeam
     if hInflictor then
+        DebugPrint("Infected player was knifed by a zombie")
         --SOS: Cannot get hAttacker to work
         --CTakeDamageInfo CreateDamageInfo (handle hInflictor, handle hAttacker, Vector force, Vector hitPos, float flDamage, int damageTypes)
         local cDamageInfo = CreateDamageInfo(hInflictor, nil, Vector(0, 0, 100), Vector(0, 0, 0), ZR_INFECT_DAMAGE, DMG_BULLET)
         hInfected:TakeDamage(cDamageInfo)
         DestroyDamageInfo(cDamageInfo)
+    else
+        DebugPrint("Infected player has spawned late or was chosen as a mother zombie")
     end
 
     hInfected:SetTeam(CS_TEAM_T)
     if ZR_ZOMBIE_SPAWNED == false then
+        DebugPrint("Setting mother zombie class")
         InjectPlayerClass(ZRClass.Zombie.MotherZombie, hInfected)
     else
+        DebugPrint("Setting regular zombie class")
         InjectPlayerClass(PickRandomZombieDefaultClass(), hInfected)
     end
 
     if bKeepPosition == false then
+        DebugPrint("Infection is not in-place")
         return
     end
     hInfected:SetOrigin(vecOrigin)
@@ -43,6 +52,8 @@ end
 
 tCureList = {}
 function Cure(hPlayer, bKeepPosition)
+    DebugPrint("Curing a player")
+
     local vecOrigin = hPlayer:GetOrigin()
     local vecAngles = hPlayer:EyeAngles()
 
@@ -51,6 +62,7 @@ function Cure(hPlayer, bKeepPosition)
     InjectPlayerClass(PickRandomHumanDefaultClass(), hPlayer)
     tCureList[hPlayer] = nil
     if bKeepPosition == false then
+        DebugPrint("Curing is not in-place")
         return
     end
     hPlayer:SetOrigin(vecOrigin)
@@ -62,6 +74,8 @@ function CureAsync(hPlayer, bKeepPosition)
 end
 
 function Infect_PickMotherZombies()
+    DebugPrint("Picking mother zombies...")
+
     --tell OnPlayerSpawn to not force switch human who's been picked as mother zombie
     ZR_ZOMBIE_SPAWN_READY = true
 
@@ -77,12 +91,18 @@ function Infect_PickMotherZombies()
         iMotherZombieCount = iMZMinimumCount
     end
 
+    local iRemovedPlayers = 0
+
     -- remove players that belong to invalid teams from player table before proceeding with first infection logic
     for key, player in ipairs(tPlayerTable) do
         if player:GetTeam() < 2 then
             table.remove(tPlayerTable, key)
+            iRemovedPlayers = iRemovedPlayers + 1
         end
     end
+
+    DebugPrint("Infect_PickMotherZombies: Removed " .. iRemovedPlayers .. " invalid players from initial infection")
+    DebugPrint("Infect_PickMotherZombies: Picking " .. iMotherZombieCount .. " mother zombies")
 
     -- make players who've been picked as MZ recently less likely to be picked again
     -- store a variable in player's script scope, which gets initialized with value 100 if they are picked to be a mother zombie
@@ -96,6 +116,7 @@ function Infect_PickMotherZombies()
             return
         end
 
+        DebugPrint("Infect_PickMotherZombies:PickMotherZombies: Shuffling player table")
         local tPlayerTableShuffled = table.shuffle(vlua.clone(tPlayerTable))
 
         for idx = 1, #tPlayerTableShuffled do
@@ -111,6 +132,7 @@ function Infect_PickMotherZombies()
                 tPlayerScope.MZSpawn_SkipChance = tPlayerScope.MZSpawn_SkipChance - 20
             else
                 -- player failed the roll, pick him as MZ and initialize/refresh value of the SkipChance variable in his script scope
+                DebugPrint("Infect_PickMotherZombies:PickMotherZombies: Inserting a player into initial infection")
                 tPlayerScope.MZSpawn_SkipChance = 100
                 table.insert(tMotherZombies, hPlayer)
 
@@ -125,11 +147,14 @@ function Infect_PickMotherZombies()
     end
 
     repeat
+        DebugPrint("Infect_PickMotherZombies: Calling PickMotherZombies with " .. #tMotherZombies .. " out of " .. iMotherZombieCount .. " mother zombies chosen")
         PickMotherZombies()
     until #tMotherZombies == iMotherZombieCount
 
     -- can iterate over the tMotherZombies here to print players who got picked as MZ to console
     -- (in the future, when we surely get access to player's steamid and nickname from lua)
+
+    DebugPrint("Infect_PickMotherZombies: Infecting mother zombies")
 
     for index, player in pairs(tMotherZombies) do
         Infect(nil, player, bSpawnType, false)
