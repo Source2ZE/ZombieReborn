@@ -40,3 +40,9 @@ function table.RemoveValue(tbl, value)
         end
     end
 end
+
+function DebugPrint(message)
+    if Convars:GetInt("zr_debug_print") == 1 then
+        print(message)
+    end
+end
