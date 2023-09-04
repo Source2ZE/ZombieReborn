@@ -10,6 +10,7 @@ require("ZombieReborn.Knockback")
 require("ZombieReborn.RespawnToggle")
 require("ZombieReborn.AmmoReplenish")
 require("ZombieReborn.PlayerClass")
+require("ZombieReborn.AntiStack")
 
 ZR_ROUND_STARTED = false
 ZR_ZOMBIE_SPAWNED = false -- Check if first zombie spawned
