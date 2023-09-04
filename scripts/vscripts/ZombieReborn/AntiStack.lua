@@ -8,24 +8,24 @@ function testKnife(hPlayer)
     local vecEnd = vecStart + hPlayer:EyeAngles():Forward() * 48
     local traceData = {
         startpos = vecStart,
-        endpos = vecEnd
+        endpos = vecEnd,
     }
-	--To make sure zombie can't knife someone through walls
+    --To make sure zombie can't knife someone through walls
     TraceLine(traceData)
     vecEnd = traceData.pos
     --DebugDrawLine(vecStart, vecEnd, 255, 0, 0, false, 5)
-    local candidates = Entities:FindAllByClassnameWithin("player", vecStart, 120);
+    local candidates = Entities:FindAllByClassnameWithin("player", vecStart, 120)
     for i, v in ipairs(candidates) do
         if v:GetTeam() == CS_TEAM_CT and v:IsAlive() then
             local traceData2 = {
                 startpos = vecStart,
                 endpos = vecEnd,
-                ent = v 
+                ent = v,
             }
-			--Trace against player bounding box
-            TraceCollideable(traceData2) 
+            --Trace against player bounding box
+            TraceCollideable(traceData2)
             if traceData2.hit then
-				--Infect the player if test succeeded
+                --Infect the player if test succeeded
                 --DebugDrawBox(v:GetAbsOrigin(), v:GetBoundingMins(), v:GetBoundingMaxs(), 0, 0, 255, 100, 5);
                 DebugPrint("Attempting to infect player through stack")
                 Infect(hPlayer, v, true, false)
@@ -41,7 +41,7 @@ local OnWeaponFired = function(event)
         return
     end
     zombieKnife[hPlayer] = nil
-	--Queue a trace test one frame after
+    --Queue a trace test one frame after
     DoEntFireByInstanceHandle(hPlayer, "CallScriptFunction", "testKnife", 0.01, hPlayer, hPlayer)
 end
 
@@ -51,7 +51,7 @@ local OnPlayerHurt = function(event)
     if hAttacker:GetTeam() ~= CS_TEAM_T or hVictim:GetTeam() ~= CS_TEAM_CT then
         return
     end
-	--tell the test to ignore if zombie already knifed someone
+    --tell the test to ignore if zombie already knifed someone
     zombieKnife[hAttacker] = true
 end
 
