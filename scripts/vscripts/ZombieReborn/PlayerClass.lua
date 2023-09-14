@@ -89,8 +89,16 @@ function CPlayerHumanBase:OnInjection()
     --accessing value indirectly through the player handle would also work
     --such as self.health. But this value might be overriden by mapper who would
     --like to set value directly on the player handle as well
-    local model = thisClass.model[tostring(RandomInt(1, table.size(thisClass.model)))]
+    local modelIndex = tostring(RandomInt(1, table.size(thisClass.model)))
+    local model = thisClass.model[modelIndex]
+    local maxSkinIndex = tonumber(thisClass.max_skin_index[modelIndex])
+
     self:SetModel(model)
+
+    if maxSkinIndex ~= nil then
+        DoEntFireByInstanceHandle(self, "skin", tostring(RandomInt(0, maxSkinIndex)), 0.01, nil, nil)
+    end
+
     DebugPrint("CPlayerHumanBase:OnInjection: Model set")
     self:SetMaxHealth(thisClass.health)
     self:SetHealth(thisClass.health)
@@ -102,8 +110,16 @@ end
 --Do something when this class is injected onto the player
 function CPlayerZombieBase:OnInjection()
     local thisClass = self.zrclass
-    local model = thisClass.model[tostring(RandomInt(1, table.size(thisClass.model)))]
+    local modelIndex = tostring(RandomInt(1, table.size(thisClass.model)))
+    local model = thisClass.model[modelIndex]
+    local maxSkinIndex = tonumber(thisClass.max_skin_index[modelIndex])
+
     self:SetModel(model)
+
+    if maxSkinIndex ~= nil then
+        DoEntFireByInstanceHandle(self, "skin", tostring(RandomInt(0, maxSkinIndex)), 0.01, nil, nil)
+    end
+
     DebugPrint("CPlayerZombieBase:OnInjection: Model set")
     self:SetMaxHealth(thisClass.health)
     self:SetHealth(thisClass.health)
