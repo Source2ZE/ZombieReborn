@@ -161,7 +161,7 @@ function Infect_PickMotherZombies()
 
     for index, player in pairs(tMotherZombies) do
         if Convars:GetInt("zr_infect_spawn_crash_fix") == 1 then
-            DoEntFireByInstanceHandle(player , "SetHealth", "0", 0.01, nil, nil)
+            DoEntFireByInstanceHandle(player, "SetHealth", "0", 0.01, nil, nil)
         else
             Infect(nil, player, bSpawnType, false)
         end
