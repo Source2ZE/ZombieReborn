@@ -156,13 +156,17 @@ function Infect_PickMotherZombies()
 
     DebugPrint("Infect_PickMotherZombies: Infecting mother zombies")
 
-    for index, player in pairs(tMotherZombies) do
-        Infect(nil, player, bSpawnType, false)
-    end
-    print("Player count: " .. iPlayerCount .. ", Mother Zombies Spawned: " .. iMotherZombieCount)
-
     -- Mother zombie spawned
     ZR_ZOMBIE_SPAWNED = true
+
+    for index, player in pairs(tMotherZombies) do
+        if Convars:GetInt("zr_infect_spawn_crash_fix") == 1 then
+            DoEntFireByInstanceHandle(player, "SetHealth", "0", 0.01, nil, nil)
+        else
+            Infect(nil, player, bSpawnType, false)
+        end
+    end
+    print("Player count: " .. iPlayerCount .. ", Mother Zombies Spawned: " .. iMotherZombieCount)
 end
 
 function Infect_OnRoundFreezeEnd()
