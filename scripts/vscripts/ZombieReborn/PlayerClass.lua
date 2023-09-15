@@ -94,7 +94,7 @@ function CPlayerHumanBase:OnInjection()
     local maxSkinIndex = tonumber(thisClass.max_skin_index[modelIndex])
 
     -- Ensure this model is precached
-    SpawnEntityFromTableSynchronous("prop_dynamic", {model = model}):Kill()
+    SpawnEntityFromTableSynchronous("prop_dynamic", { model = model }):Kill()
     self:SetModel(model)
 
     if maxSkinIndex ~= nil then
@@ -117,7 +117,7 @@ function CPlayerZombieBase:OnInjection()
     local maxSkinIndex = tonumber(thisClass.max_skin_index[modelIndex])
 
     -- Ensure this model is precached
-    SpawnEntityFromTableSynchronous("prop_dynamic", {model = model}):Kill()
+    SpawnEntityFromTableSynchronous("prop_dynamic", { model = model }):Kill()
     self:SetModel(model)
 
     if maxSkinIndex ~= nil then
