@@ -11,3 +11,7 @@ Convars:RegisterConvar("zr_debug_print", "0", "Whether to print extra informatio
 
 -- Knockback
 Convars:RegisterConvar("zr_knockback_scale", "5", "Knockback damage multiplier", FCVAR_RELEASE)
+
+-- AntiStack
+Convars:RegisterConvar("zr_antistack_enable", "0", "Temporary fix to allow zombie knife through each other", FCVAR_RELEASE)
+Convars:RegisterConvar("zr_antistack_range", "20", "AntiStack knife range", FCVAR_RELEASE)
