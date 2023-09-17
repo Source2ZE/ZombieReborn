@@ -4,8 +4,9 @@ function testKnife(hPlayer)
         -- zombie has already knifed someone
         return
     end
+    local knifeRange = Convars:GetInt("zr_antistack_range")
     local vecStart = hPlayer:EyePosition()
-    local vecEnd = vecStart + hPlayer:EyeAngles():Forward() * 48
+    local vecEnd = vecStart + hPlayer:EyeAngles():Forward() * knifeRange
     local traceData = {
         startpos = vecStart,
         endpos = vecEnd,
@@ -14,7 +15,7 @@ function testKnife(hPlayer)
     TraceLine(traceData)
     vecEnd = traceData.pos
     --DebugDrawLine(vecStart, vecEnd, 255, 0, 0, false, 5)
-    local candidates = Entities:FindAllByClassnameWithin("player", vecStart, 120)
+    local candidates = Entities:FindAllByClassnameWithin("player", vecStart, 72 + knifeRange)
     for i, v in ipairs(candidates) do
         if v:GetTeam() == CS_TEAM_CT and v:IsAlive() then
             local traceData2 = {
@@ -36,6 +37,9 @@ function testKnife(hPlayer)
 end
 
 local OnWeaponFired = function(event)
+    if Convars:GetInt("zr_antistack_enable") == 0 then
+        return
+    end
     local hPlayer = EHandleToHScript(event.userid_pawn)
     if hPlayer:GetTeam() ~= CS_TEAM_T then
         return
@@ -46,6 +50,9 @@ local OnWeaponFired = function(event)
 end
 
 local OnPlayerHurt = function(event)
+    if Convars:GetInt("zr_antistack_enable") == 0 or event.weapon == "" or event.attacker_pawn == nil then
+        return
+    end
     local hAttacker = EHandleToHScript(event.attacker_pawn)
     local hVictim = EHandleToHScript(event.userid_pawn)
     if hAttacker:GetTeam() ~= CS_TEAM_T or hVictim:GetTeam() ~= CS_TEAM_CT then
