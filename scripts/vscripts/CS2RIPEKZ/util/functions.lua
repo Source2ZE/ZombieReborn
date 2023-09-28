@@ -1,3 +1,5 @@
+-- doesn't seem to be used anywhere, but i'll keep it here for now
+
 -- put your fancy global functions here for you (and others) to use, i guess
 
 -- Apparently entity indices take up the first 14 bits of an EHandle, need more testing to really verify this
@@ -42,7 +44,7 @@ function table.RemoveValue(tbl, value)
 end
 
 function DebugPrint(message)
-    if Convars:GetInt("zr_debug_print") == 1 then
+    if Convars:GetInt("kz_debug_print") == 1 then
         print(message)
     end
 end

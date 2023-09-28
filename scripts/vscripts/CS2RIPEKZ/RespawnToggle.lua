@@ -1,7 +1,6 @@
 bRespawnToggle = false
 
---Maps should trigger this when they want to stop/start zombie respawning
---OnWhatever -> zr_toggle_respawn -> Trigger -> Delay 0 -> Once Only
+-- Not gonna use this but keeping anyway
 function SetupRespawnToggler()
     bRespawnToggle = false
     local tKeyValues = {}
