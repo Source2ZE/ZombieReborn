@@ -72,7 +72,8 @@ function SetAllHuman()
 
         if hController ~= nil and hController:GetPawn() ~= nil then
             --I have absolutely no idea why, but this has to be delayed now
-            CureAsync(hController:GetPawn(), true)
+            --CureAsync(hController:GetPawn(), true)
+            DoEntFireByInstanceHandle(hController:GetPawn(), "runscriptcode", "Cure(thisEntity, true)", i * 0.05, nil, nil)
         end
     end
 
