@@ -15,3 +15,5 @@ Convars:RegisterConvar("zr_knockback_scale", "5", "Knockback damage multiplier",
 -- AntiStack
 Convars:RegisterConvar("zr_antistack_enable", "0", "Temporary fix to allow zombie knife through each other", FCVAR_RELEASE)
 Convars:RegisterConvar("zr_antistack_range", "20", "AntiStack knife range", FCVAR_RELEASE)
+
+Convars:RegisterConvar("zr_use_cs2fixes_team_switch", "0", "Whether to rely on CS2Fixes' team switching on round start.", FCVAR_RELEASE)

@@ -70,10 +70,14 @@ function SetAllHuman()
     for i = 1, 64 do
         local hController = EntIndexToHScript(i)
 
-        if hController ~= nil and hController:GetPawn() ~= nil then
-            --I have absolutely no idea why, but this has to be delayed now
-            --CureAsync(hController:GetPawn(), true)
-            DoEntFireByInstanceHandle(hController:GetPawn(), "runscriptcode", "Cure(thisEntity, true)", i * 0.05, nil, nil)
+        if hController ~= nil and hController:GetPawn() ~= nil and hController:GetTeam() >= CS_TEAM_T then
+            if Convars:GetInt("zr_use_cs2fixes_team_switch") == 1 then
+                InjectPlayerClass(PickRandomHumanDefaultClass(), hController:GetPawn())
+            else
+                --I have absolutely no idea why, but this has to be delayed now
+                --CureAsync(hController:GetPawn(), true)
+                DoEntFireByInstanceHandle(hController:GetPawn(), "runscriptcode", "Cure(thisEntity, true)", i * 0.05, nil, nil)
+            end
         end
     end
 
