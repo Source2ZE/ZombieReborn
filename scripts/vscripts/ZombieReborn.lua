@@ -127,6 +127,11 @@ function OnPlayerSpawn(event)
     --__DumpScope(0, event)
     local hPlayer = EHandleToHScript(event.userid_pawn)
 
+    -- Player turned into mother zombie
+    if tMZList[hPlayer] then
+        return
+    end
+    
     -- Infect late spawners & change mother zombie who died back to normal zombie
     -- Also don't do this if the player spawns as a spectator
     if hPlayer:GetTeam() >= CS_TEAM_T and ZR_ZOMBIE_SPAWNED and tCureList[hPlayer] == nil then
