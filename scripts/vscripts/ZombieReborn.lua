@@ -178,9 +178,9 @@ function OnPlayerTeam(event)
     local hPlayer = EHandleToHScript(event.userid_pawn)
     if ZR_ZOMBIE_SPAWNED and event.team == CS_TEAM_CT and tCureList[hPlayer] == nil then
         --SetTeam doesn't work on the same tick as well :pepemeltdown:
-        DoEntFireByInstanceHandle(hPlayer, "runscriptcode", "thisEntity:SetTeam(CS_TEAM_T)", 0.01, nil, nil)
+        DoEntFireByInstanceHandle(hPlayer, "runscriptcode", "thisEntity:SetTeam(CS_TEAM_NONE); thisEntity:SetTeam(CS_TEAM_T)", 0.01, nil, nil)
     elseif not ZR_ZOMBIE_SPAWN_READY and event.team == CS_TEAM_T then
-        DoEntFireByInstanceHandle(hPlayer, "runscriptcode", "thisEntity:SetTeam(CS_TEAM_CT)", 0.01, nil, nil)
+        DoEntFireByInstanceHandle(hPlayer, "runscriptcode", "thisEntity:SetTeam(CS_TEAM_NONE); thisEntity:SetTeam(CS_TEAM_CT)", 0.01, nil, nil)
     end
 end
 
