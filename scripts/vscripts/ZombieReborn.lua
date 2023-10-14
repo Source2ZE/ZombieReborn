@@ -158,7 +158,8 @@ function OnItemEquip(event)
     end
 end
 
-function OnRoundEnd(event)
+-- Basically round_end
+function OnPreRestart(event)
     ZR_ZOMBIE_SPAWNED = false
     ZR_ZOMBIE_SPAWN_READY = false
 end
@@ -192,7 +193,7 @@ tListenerIds = {
     ListenToGameEvent("molotov_detonate", Knockback_OnMolotovDetonate, nil),
     ListenToGameEvent("round_freeze_end", Infect_OnRoundFreezeEnd, nil),
     ListenToGameEvent("item_equip", OnItemEquip, nil),
-    ListenToGameEvent("round_end", OnRoundEnd, nil),
+    ListenToGameEvent("cs_pre_restart", OnPreRestart, nil),
     ListenToGameEvent("player_team", OnPlayerTeam, nil),
     ListenToGameEvent("round_prestart", OnPreStart, nil),
 }
