@@ -26,18 +26,43 @@ function Infect(hInflictor, hInfected, bKeepPosition, bDead)
         hInfected:TakeDamage(cDamageInfo)
         DestroyDamageInfo(cDamageInfo)
     else
-        DebugPrint("Infected player has spawned late or was chosen as a mother zombie")
+        DebugPrint("Infected player has spawned late")
     end
 
     hInfected:SetTeam(CS_TEAM_T)
-    if ZR_ZOMBIE_SPAWNED == false then
-        DebugPrint("Setting mother zombie class")
-        InjectPlayerClass(ZRClass.Zombie.MotherZombie, hInfected)
-    else
-        DebugPrint("Setting regular zombie class")
-        InjectPlayerClass(PickRandomZombieDefaultClass(), hInfected)
+
+    DebugPrint("Setting regular zombie class")
+    InjectPlayerClass(PickRandomZombieDefaultClass(), hInfected)
+
+    if bKeepPosition == false then
+        DebugPrint("Infection is not in-place")
+        return
+    end
+    hInfected:SetOrigin(vecOrigin)
+    hInfected:SetAngles(vecAngles.x, vecAngles.y, vecAngles.z)
+end
+
+tMZList = {}
+function InfectMotherZombie(hInfected, bKeepPosition)
+    DebugPrint("Infecting a player to mother zombie")
+
+    if hInfected:GetHealth() == 0 then
+        --Infect was called on a spectator somehow during initial infection, nope out
+        print("Attempted to infect a spectator!")
+        return
     end
 
+    local vecOrigin = hInfected:GetOrigin()
+    local vecAngles = hInfected:EyeAngles()
+
+    tMZList[hInfected] = true
+    hInfected:SetTeam(CS_TEAM_NONE)
+    hInfected:SetTeam(CS_TEAM_T)
+
+    DebugPrint("Setting mother zombie class")
+    InjectPlayerClass(ZRClass.Zombie.MotherZombie, hInfected)
+
+    tMZList[hInfected] = nil
     if bKeepPosition == false then
         DebugPrint("Infection is not in-place")
         return
@@ -58,6 +83,7 @@ function Cure(hPlayer, bKeepPosition)
     local vecAngles = hPlayer:EyeAngles()
 
     tCureList[hPlayer] = true
+    hPlayer:SetTeam(CS_TEAM_NONE)
     hPlayer:SetTeam(CS_TEAM_CT)
     InjectPlayerClass(PickRandomHumanDefaultClass(), hPlayer)
     tCureList[hPlayer] = nil
@@ -163,7 +189,8 @@ function Infect_PickMotherZombies()
         if Convars:GetInt("zr_infect_spawn_crash_fix") == 1 then
             DoEntFireByInstanceHandle(player, "SetHealth", "0", 0.01, nil, nil)
         else
-            Infect(nil, player, bSpawnType, false)
+            -- add a small delay between each just to be extra safe
+            DoEntFireByInstanceHandle(player, "RunScriptCode", "InfectMotherZombie(thisEntity, " .. tostring(bSpawnType) .. ")", 0.05 * index, nil, nil)
         end
     end
     print("Player count: " .. iPlayerCount .. ", Mother Zombies Spawned: " .. iMotherZombieCount)
