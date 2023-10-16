@@ -54,7 +54,7 @@ function OnRoundStart(event)
     ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
 
     --Setup various functions and gameplay elements
-    SetAllHuman()
+    SetAllHumanClasses()
     SetupRespawnToggler()
     SetupAmmoReplenish()
 
@@ -63,21 +63,14 @@ function OnRoundStart(event)
     ZR_ROUND_STARTED = true
 end
 
-function SetAllHuman()
-    local bRespawn = Convars:GetBool("mp_respawn_on_death_ct")
-    Convars:SetBool("mp_respawn_on_death_ct", true)
-
+function SetAllHumanClasses()
     for i = 1, 64 do
         local hController = EntIndexToHScript(i)
 
         if hController ~= nil and hController:GetPawn() ~= nil then
-            --I have absolutely no idea why, but this has to be delayed now
-            --CureAsync(hController:GetPawn(), true)
-            DoEntFireByInstanceHandle(hController:GetPawn(), "runscriptcode", "Cure(thisEntity, true)", i * 0.05, nil, nil)
+            InjectPlayerClass(PickRandomHumanDefaultClass(), hController:GetPawn())
         end
     end
-
-    Convars:SetBool("mp_respawn_on_death_ct", bRespawn)
 end
 
 function OnPlayerHurt(event)
@@ -165,9 +158,19 @@ function OnItemEquip(event)
     end
 end
 
-function OnRoundEnd(event)
+-- Basically round_end
+function OnPreRestart(event)
     ZR_ZOMBIE_SPAWNED = false
     ZR_ZOMBIE_SPAWN_READY = false
+end
+
+function OnPreStart(event)
+    for i = 1, 64 do
+        local hController = EntIndexToHScript(i)
+        if hController ~= nil and hController:GetTeam() == CS_TEAM_T then
+            hController:SetTeam(CS_TEAM_CT)
+        end
+    end
 end
 
 function OnPlayerTeam(event)
@@ -175,9 +178,9 @@ function OnPlayerTeam(event)
     local hPlayer = EHandleToHScript(event.userid_pawn)
     if ZR_ZOMBIE_SPAWNED and event.team == CS_TEAM_CT and tCureList[hPlayer] == nil then
         --SetTeam doesn't work on the same tick as well :pepemeltdown:
-        DoEntFireByInstanceHandle(hPlayer, "runscriptcode", "thisEntity:SetTeam(CS_TEAM_T)", 0.01, nil, nil)
+        DoEntFireByInstanceHandle(hPlayer, "runscriptcode", "thisEntity:SetTeam(CS_TEAM_NONE); thisEntity:SetTeam(CS_TEAM_T)", 0.01, nil, nil)
     elseif not ZR_ZOMBIE_SPAWN_READY and event.team == CS_TEAM_T then
-        DoEntFireByInstanceHandle(hPlayer, "runscriptcode", "thisEntity:SetTeam(CS_TEAM_CT)", 0.01, nil, nil)
+        DoEntFireByInstanceHandle(hPlayer, "runscriptcode", "thisEntity:SetTeam(CS_TEAM_NONE); thisEntity:SetTeam(CS_TEAM_CT)", 0.01, nil, nil)
     end
 end
 
@@ -190,6 +193,7 @@ tListenerIds = {
     ListenToGameEvent("molotov_detonate", Knockback_OnMolotovDetonate, nil),
     ListenToGameEvent("round_freeze_end", Infect_OnRoundFreezeEnd, nil),
     ListenToGameEvent("item_equip", OnItemEquip, nil),
-    ListenToGameEvent("round_end", OnRoundEnd, nil),
+    ListenToGameEvent("cs_pre_restart", OnPreRestart, nil),
     ListenToGameEvent("player_team", OnPlayerTeam, nil),
+    ListenToGameEvent("round_prestart", OnPreStart, nil),
 }
