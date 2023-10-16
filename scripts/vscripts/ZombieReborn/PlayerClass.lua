@@ -161,4 +161,3 @@ end
 --table.dump(ZRClass.Human)
 --print("Zombie Class: ")
 --table.dump(ZRClass.Zombie)
-

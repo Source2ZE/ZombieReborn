@@ -131,7 +131,7 @@ function OnPlayerSpawn(event)
     if tMZList[hPlayer] then
         return
     end
-    
+
     -- Infect late spawners & change mother zombie who died back to normal zombie
     -- Also don't do this if the player spawns as a spectator
     if hPlayer:GetTeam() >= CS_TEAM_T and ZR_ZOMBIE_SPAWNED and tCureList[hPlayer] == nil then
