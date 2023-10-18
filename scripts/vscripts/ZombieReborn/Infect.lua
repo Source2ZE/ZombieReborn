@@ -120,9 +120,9 @@ function Infect_PickMotherZombies()
     local iRemovedPlayers = 0
 
     -- remove players that belong to invalid teams from player table before proceeding with first infection logic
-    for key, player in ipairs(tPlayerTable) do
-        if player:GetTeam() < 2 then
-            table.remove(tPlayerTable, key)
+    for i = iPlayerCount, 1, -1 do
+        if tPlayerTable[i]:GetTeam() < 2 then
+            table.remove(tPlayerTable, i)
             iRemovedPlayers = iRemovedPlayers + 1
         end
     end
@@ -202,12 +202,12 @@ function Infect_OnRoundFreezeEnd()
     local iMZSpawntime = RandomInt(iMZSpawntimeMinimum, iMZSpawntimeMaximum)
 
     -- reduce mother zombie spawn skip chance for players who have that variable in their script scope
-    for k, player in pairs(Entities:FindAllByClassname("player")) do
-        local scope = player:GetOrCreatePrivateScriptScope()
-        if scope.MZSpawn_SkipChance then
-            scope.MZSpawn_SkipChance = scope.MZSpawn_SkipChance - 20
-        end
-    end
+    -- for k, player in pairs(Entities:FindAllByClassname("player")) do
+    --     local scope = player:GetOrCreatePrivateScriptScope()
+    --     if scope.MZSpawn_SkipChance then
+    --         scope.MZSpawn_SkipChance = scope.MZSpawn_SkipChance - 20
+    --     end
+    -- end
 
     -- announce time remaining to infection and do infection at countdown<=0
     local MZSelection_Countdown = iMZSpawntime
