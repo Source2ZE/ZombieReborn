@@ -169,15 +169,6 @@ function OnPreRestart(event)
     ZR_ZOMBIE_SPAWN_READY = false
 end
 
-function OnPreStart(event)
-    for i = 1, 64 do
-        local hController = EntIndexToHScript(i)
-        if hController ~= nil and hController:GetTeam() == CS_TEAM_T then
-            hController:SetTeam(CS_TEAM_CT)
-        end
-    end
-end
-
 function OnPlayerTeam(event)
     --__DumpScope(0, event)
     local hPlayer = EHandleToHScript(event.userid_pawn)
@@ -200,5 +191,4 @@ tListenerIds = {
     ListenToGameEvent("item_equip", OnItemEquip, nil),
     ListenToGameEvent("cs_pre_restart", OnPreRestart, nil),
     ListenToGameEvent("player_team", OnPlayerTeam, nil),
-    ListenToGameEvent("round_prestart", OnPreStart, nil),
 }
