@@ -120,9 +120,9 @@ function Infect_PickMotherZombies()
     local iRemovedPlayers = 0
 
     -- remove players that belong to invalid teams from player table before proceeding with first infection logic
-    for key, player in ipairs(tPlayerTable) do
-        if player:GetTeam() < 2 then
-            table.remove(tPlayerTable, key)
+    for i = iPlayerCount, 1, -1 do
+        if tPlayerTable[i]:GetTeam() < 2 then
+            table.remove(tPlayerTable, i)
             iRemovedPlayers = iRemovedPlayers + 1
         end
     end
@@ -153,11 +153,9 @@ function Infect_PickMotherZombies()
             -- if MZSpawn_SkipChance is not initialized, then the if below is guaranteed to not pass
             -- Roll for player's chance to skip being picked as MZ
             if RandomInt(1, 100) <= iSkipChance then
-                -- player succeeded the roll and avoided being picked as MZ,
-                -- reduce the value of his SkipChance script scope variable (just for good measure)
-                tPlayerScope.MZSpawn_SkipChance = tPlayerScope.MZSpawn_SkipChance - 20
+                -- player succeeded the roll and avoided being picked as MZ
             else
-                -- player failed the roll, pick him as MZ and initialize/refresh value of the SkipChance variable in his script scope
+                -- player failed the roll, pick him as MZ and set his Skip Chance to 100%
                 DebugPrint("Infect_PickMotherZombies:PickMotherZombies: Inserting a player into initial infection")
                 tPlayerScope.MZSpawn_SkipChance = 100
                 table.insert(tMotherZombies, hPlayer)
@@ -176,6 +174,15 @@ function Infect_PickMotherZombies()
         DebugPrint("Infect_PickMotherZombies: Calling PickMotherZombies with " .. #tMotherZombies .. " out of " .. iMotherZombieCount .. " mother zombies chosen")
         PickMotherZombies()
     until #tMotherZombies == iMotherZombieCount
+
+    -- Reduce the Skip Chance of everyone but mother zombies picked in current round
+    -- tPlayerTable here contains only players who were not chosen to be mother zombies
+    for i = 1, #tPlayerTable do
+        local scope = tPlayerTable[i]:GetOrCreatePrivateScriptScope()
+        if scope.MZSpawn_SkipChance then
+            scope.MZSpawn_SkipChance = scope.MZSpawn_SkipChance - 20
+        end
+    end
 
     -- can iterate over the tMotherZombies here to print players who got picked as MZ to console
     -- (in the future, when we surely get access to player's steamid and nickname from lua)
@@ -200,14 +207,6 @@ function Infect_OnRoundFreezeEnd()
     local iMZSpawntimeMinimum = Convars:GetInt("zr_infect_spawn_time_min")
     local iMZSpawntimeMaximum = Convars:GetInt("zr_infect_spawn_time_max")
     local iMZSpawntime = RandomInt(iMZSpawntimeMinimum, iMZSpawntimeMaximum)
-
-    -- reduce mother zombie spawn skip chance for players who have that variable in their script scope
-    for k, player in pairs(Entities:FindAllByClassname("player")) do
-        local scope = player:GetOrCreatePrivateScriptScope()
-        if scope.MZSpawn_SkipChance then
-            scope.MZSpawn_SkipChance = scope.MZSpawn_SkipChance - 20
-        end
-    end
 
     -- announce time remaining to infection and do infection at countdown<=0
     local MZSelection_Countdown = iMZSpawntime
