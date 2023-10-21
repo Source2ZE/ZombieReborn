@@ -154,9 +154,10 @@ function Infect_PickMotherZombies()
             -- Roll for player's chance to skip being picked as MZ
             if RandomInt(1, 100) <= iSkipChance then
                 -- player succeeded the roll and avoided being picked as MZ
+                DebugPrint("Infect_PickMotherZombies:PickMotherZombies: Skipping a player during initial infection selection (SkipChance = " .. iSkipChance .. "%)")
             else
                 -- player failed the roll, pick him as MZ and set his Skip Chance to 100%
-                DebugPrint("Infect_PickMotherZombies:PickMotherZombies: Inserting a player into initial infection")
+                DebugPrint("Infect_PickMotherZombies:PickMotherZombies: Inserting a player into initial infection (SkipChance = " .. iSkipChance .. "%)")
                 tPlayerScope.MZSpawn_SkipChance = 100
                 table.insert(tMotherZombies, hPlayer)
 
@@ -170,7 +171,19 @@ function Infect_PickMotherZombies()
         end
     end
 
+    local iFailSafeCounter = 5
+
     repeat
+        -- If we somehow don't have enough mother zombies after going through the players table 5 times,
+        -- set Skip Chance of everyone but already picked mother zombies to 0
+        if iFailSafeCounter == 0 then
+            DebugPrint("Infect_PickMotherZombies: Not enough mother zombies after calling PickMotherZombies 5 times, resetting everyone's Skip Chance")
+            for i = 1, #tPlayerTable do
+                tPlayerTable[i]:GetOrCreatePrivateScriptScope().MZSpawn_SkipChance = 0
+            end
+        end
+        iFailSafeCounter = iFailSafeCounter - 1
+            
         DebugPrint("Infect_PickMotherZombies: Calling PickMotherZombies with " .. #tMotherZombies .. " out of " .. iMotherZombieCount .. " mother zombies chosen")
         PickMotherZombies()
     until #tMotherZombies == iMotherZombieCount
