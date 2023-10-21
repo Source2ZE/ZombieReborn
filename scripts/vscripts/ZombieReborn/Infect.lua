@@ -183,7 +183,7 @@ function Infect_PickMotherZombies()
             end
         end
         iFailSafeCounter = iFailSafeCounter - 1
-            
+
         DebugPrint("Infect_PickMotherZombies: Calling PickMotherZombies with " .. #tMotherZombies .. " out of " .. iMotherZombieCount .. " mother zombies chosen")
         PickMotherZombies()
     until #tMotherZombies == iMotherZombieCount
