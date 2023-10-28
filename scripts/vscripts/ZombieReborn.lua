@@ -143,7 +143,7 @@ function OnPlayerSpawn(event)
 
     -- assign human class for those who missed the human class assignment
     if ZR_ROUND_STARTED and not ZR_ZOMBIE_SPAWNED and hPlayer:GetTeam() == CS_TEAM_CT then
-        InjectPlayerClass(PickRandomHumanDefaultClass(), hPlayer)
+        DoEntFireByInstanceHandle(hPlayer, "RunScriptCode", "InjectPlayerClass(PickRandomHumanDefaultClass(), thisEntity)", 0.01, nil, nil)
     end
 end
 
