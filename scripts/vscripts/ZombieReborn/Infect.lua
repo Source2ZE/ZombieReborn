@@ -32,9 +32,6 @@ function Infect(hInflictor, hInfected, bKeepPosition, bDead)
     hInfected:SetTeam(CS_TEAM_T)
 
     -- Asynchronously kill any utils held by the infected player AND any nades threwn by said player
-    -- Issue: cooking a grenade and getting infected lets you hold that grenade
-    -- while being a zombie, which bypasses grenade-killing in the OnItemEquip
-    -- Issue 2: Cooking a grenade and getting infected causes you to drop the grenade, which then can damage humans
     local tHeldWeapons = hInfected:GetEquippedWeapons()
     for _,hWeapon in ipairs(tHeldWeapons) do
         if hWeapon and hWeapon:GetClassname() ~= "weapon_knife" then
@@ -77,7 +74,7 @@ function InfectMotherZombie(hInfected, bKeepPosition)
     hInfected:SetTeam(CS_TEAM_NONE)
     hInfected:SetTeam(CS_TEAM_T)
 
-    -- Same thing as in Infect() @ tHeldWeapons
+    -- Asynchronously kill any utils held by the infected player AND any nades threwn by said player
     local tHeldWeapons = hInfected:GetEquippedWeapons()
     for _,hWeapon in ipairs(tHeldWeapons) do
         if hWeapon and hWeapon:GetClassname() ~= "weapon_knife" then
