@@ -38,7 +38,7 @@ function Infect(hInflictor, hInfected, bKeepPosition, bDead)
             DoEntFireByInstanceHandle(hWeapon, "Kill", "", 0.02, nil, nil)
         end
     end
-    
+
     local tThrewnNades = Entities:FindAllByClassname("hegrenade_projectile")
     for __,hProjectile in ipairs(tThrewnNades) do
         if hProjectile and hProjectile:GetOwner() == hInfected then
