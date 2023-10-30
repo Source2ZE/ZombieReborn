@@ -141,11 +141,10 @@ function OnPlayerSpawn(event)
         return
     end
 
-    -- force switch team for player who tries to join the T side
-    -- if not ZR_ZOMBIE_SPAWN_READY and hPlayer:GetTeam() == CS_TEAM_T then
-    --     --print("Forcing player to ct")
-    --     CureAsync(hPlayer, false)
-    -- end
+    -- assign human class for those who missed the human class assignment
+    if ZR_ROUND_STARTED and not ZR_ZOMBIE_SPAWNED and hPlayer:GetTeam() == CS_TEAM_CT then
+        DoEntFireByInstanceHandle(hPlayer, "RunScriptCode", "InjectPlayerClass(PickRandomHumanDefaultClass(), thisEntity)", 0.01, nil, nil)
+    end
 end
 
 function OnItemEquip(event)
