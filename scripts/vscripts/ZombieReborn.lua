@@ -83,7 +83,7 @@ function OnPlayerHurt(event)
 
     if hAttacker:GetTeam() == CS_TEAM_CT and hVictim:GetTeam() == CS_TEAM_T then
         Knockback_Apply(hAttacker, hVictim, event.dmg_health, event.weapon)
-    elseif hAttacker:GetTeam() == CS_TEAM_T and hVictim:GetTeam() == CS_TEAM_CT then
+    elseif event.weapon == "knife" and hAttacker:GetTeam() == CS_TEAM_T and hVictim:GetTeam() == CS_TEAM_CT then
         Infect(hAttacker, hVictim, true, event.health == 0)
     end
 end
