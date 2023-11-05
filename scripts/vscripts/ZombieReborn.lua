@@ -12,7 +12,6 @@ require("ZombieReborn.AmmoReplenish")
 require("ZombieReborn.PlayerClass")
 require("ZombieReborn.AntiStack")
 
-ZR_ROUND_STARTED = false
 ZR_ZOMBIE_SPAWNED = false -- Check if first zombie spawned
 ZR_ZOMBIE_SPAWN_READY = false -- Check if first zombie is spawning
 
@@ -54,23 +53,10 @@ function OnRoundStart(event)
     ScriptPrintMessageChatAll("The game is \x05Humans vs. Zombies\x01, the goal for zombies is to infect all humans by knifing them.")
 
     --Setup various functions and gameplay elements
-    SetAllHumanClasses()
     SetupRespawnToggler()
     SetupAmmoReplenish()
 
     Timers:RemoveTimer("MZSelection_Timer")
-
-    ZR_ROUND_STARTED = true
-end
-
-function SetAllHumanClasses()
-    for i = 1, 64 do
-        local hController = EntIndexToHScript(i)
-
-        if hController ~= nil and hController:GetPawn() ~= nil then
-            InjectPlayerClass(PickRandomHumanDefaultClass(), hController:GetPawn())
-        end
-    end
 end
 
 function OnPlayerHurt(event)
@@ -141,9 +127,9 @@ function OnPlayerSpawn(event)
         return
     end
 
-    -- assign human class for those who missed the human class assignment
-    if ZR_ROUND_STARTED and not ZR_ZOMBIE_SPAWNED and hPlayer:GetTeam() == CS_TEAM_CT then
-        DoEntFireByInstanceHandle(hPlayer, "RunScriptCode", "InjectPlayerClass(PickRandomHumanDefaultClass(), thisEntity)", 0.01, nil, nil)
+    -- assign human class
+    if not ZR_ZOMBIE_SPAWNED and hPlayer:GetTeam() == CS_TEAM_CT then
+        DoEntFireByInstanceHandle(hPlayer, "RunScriptCode", "InjectPlayerClass(PickRandomHumanDefaultClass(), thisEntity)", 0.0, nil, nil)
     end
 end
 
