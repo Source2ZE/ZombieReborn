@@ -157,6 +157,14 @@ end
 function OnPlayerTeam(event)
     --__DumpScope(0, event)
     local hPlayer = EHandleToHScript(event.userid_pawn)
+
+    local tThrewnNades = Entities:FindAllByClassname("hegrenade_projectile")
+    for __, hProjectile in ipairs(tThrewnNades) do
+        if hProjectile and hProjectile:GetOwner() == hPlayer then
+            DoEntFireByInstanceHandle(hProjectile, "Kill", "", 0.02, nil, nil)
+        end
+    end
+
     if ZR_ZOMBIE_SPAWNED and event.team == CS_TEAM_CT and tCureList[hPlayer] == nil then
         --SetTeam doesn't work on the same tick as well :pepemeltdown:
         DoEntFireByInstanceHandle(hPlayer, "runscriptcode", "thisEntity:SetTeam(CS_TEAM_NONE); thisEntity:SetTeam(CS_TEAM_T)", 0.01, nil, nil)
