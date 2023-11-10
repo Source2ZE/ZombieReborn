@@ -39,13 +39,6 @@ function Infect(hInflictor, hInfected, bKeepPosition, bDead)
         end
     end
 
-    local tThrewnNades = Entities:FindAllByClassname("hegrenade_projectile")
-    for __, hProjectile in ipairs(tThrewnNades) do
-        if hProjectile and hProjectile:GetOwner() == hInfected then
-            DoEntFireByInstanceHandle(hProjectile, "Kill", "", 0.02, nil, nil)
-        end
-    end
-
     DebugPrint("Setting regular zombie class")
     InjectPlayerClass(PickRandomZombieDefaultClass(), hInfected)
 
@@ -79,13 +72,6 @@ function InfectMotherZombie(hInfected, bKeepPosition)
     for _, hWeapon in ipairs(tHeldWeapons) do
         if hWeapon and hWeapon:GetClassname() ~= "weapon_knife" then
             DoEntFireByInstanceHandle(hWeapon, "Kill", "", 0.02, nil, nil)
-        end
-    end
-
-    local tThrewnNades = Entities:FindAllByClassname("hegrenade_projectile")
-    for __, hProjectile in ipairs(tThrewnNades) do
-        if hProjectile and hProjectile:GetOwner() == hInfected then
-            DoEntFireByInstanceHandle(hProjectile, "Kill", "", 0.02, nil, nil)
         end
     end
 
