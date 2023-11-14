@@ -6,15 +6,15 @@ An experimental implementation of Zombie Escape in Counter-Strike 2 using the Lu
 
 ## Installation
 
-ZombieReborn has several requirements, you will first need to [install Metamod](https://www.sourcemm.net/downloads.php?branch=dev). Then install the [Movement Unlocker](https://github.com/Source2ZE/MovementUnlocker) and [Lua Unlocker](https://github.com/Source2ZE/LuaUnlocker) Metamod plugins for zombie knockback & Lua VScript capability respectively.
+You will first need to [install Metamod](https://www.sourcemm.net/downloads.php?branch=dev). Then, install [CS2Fixes](https://github.com/Source2ZE/CS2Fixes) for several required features and ZR integrations.
 
 Finally, copy both the `scripts` and `cfg` directories of ZombieReborn to your `game/csgo` folder. If you've already made changes to your server cfg's, you may want to just copy the contents of ours in instead.
 
 ## Project Status?
 
-ZombieReborn currently sits in an awkward spot, Lua VScript was disabled in the Mirage update, pending likely removal/replacement by a new official scripting system called Pulse. However with Pulse/Source2Mod not yet out, and not enough SDK work done to reimplement ZR in a Metamod plugin yet, Lua scripting still remains the only viable solution.
+ZombieReborn currently sits in an awkward spot, Lua VScript was disabled in the Mirage update, pending likely removal/replacement by a new official scripting system called Pulse. Therefore, development has been generally paused. Contributions are still welcome in the mean time, but they should ideally be focused on fixes and improvements, rather than significant new features.
 
-Due to Lua scripts not having a future, development has been generally paused. Contributions are still welcome in the mean time, but they should ideally be focused on fixes and improvements, rather than significant new features.
+We're currently planning a ZR rewrite in [Metamod within CS2Fixes](https://github.com/Source2ZE/CS2Fixes) or as a separate [CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp) plugin.
 
 ## Documentation
 
