@@ -1,20 +1,16 @@
 # ZombieReborn
 
-An experimental implementation of Zombie Escape in Counter-Strike 2 using the Lua [VScript API](https://cs2.poggu.me/dumped-data/vscript-list).
+Zombie:Reborn is a plugin designed for running Zombie Escape on Counter-Strike 2. However it can also be used for other zombie gamemodes like Zombie Mod.
+
+We are currently maintaining/supporting a ZR implementation within [CS2Fixes](https://github.com/Source2ZE/CS2Fixes). Eventually, this repository will be reused for a standalone ZR plugin in CounterStrikeSharp or Source2Mod.
 
 [Join our Discord](https://discord.gg/QsSGf9ZEVs) for development discussion and to keep up to date!
 
 ## Installation
 
-You will first need to [install Metamod](https://www.sourcemm.net/downloads.php?branch=dev). Then, install [CS2Fixes](https://github.com/Source2ZE/CS2Fixes) for several required features and ZR integrations.
-
-Finally, copy both the `scripts` and `cfg` directories of ZombieReborn to your `game/csgo` folder. If you've already made changes to your server cfg's, you may want to just copy the contents of ours in instead.
-
-## Project Status?
-
-ZombieReborn currently sits in an awkward spot, Lua VScript was disabled in the Mirage update, pending likely removal/replacement by a new official scripting system called Pulse. Therefore, development has been generally paused. Contributions are still welcome in the mean time, but they should ideally be focused on fixes and improvements, rather than significant new features.
-
-We're currently planning a ZR rewrite in [Metamod within CS2Fixes](https://github.com/Source2ZE/CS2Fixes) or as a separate [CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp) plugin.
+- Follow [CS2Fixes install instructions](https://github.com/Source2ZE/CS2Fixes?tab=readme-ov-file#installation)
+- Ensure `zr_enable 1` is set in `cfg/cs2fixes/cs2fixes.cfg`
+- Navigate to `/game/csgo/addons/cs2fixes/configs/zr` and rename the config files by removing `.example`, then configure them as desired
 
 ## Documentation
 
